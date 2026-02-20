@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>PemaClean | Клининг в Ростове-на-Дону</title>
+    <title>PemaCleaning | Премиальный клининг в Ростове-на-Дону</title>
     <!-- Шрифт Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,17 +13,16 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <!-- Принудительные стили прямо в HTML -->
-    
 </head>
 <body>
     <!-- Навигация -->
     <nav class="navbar">
         <div class="container nav-container">
-            <div class="logo">Pema<span>Clean</span></div>
+            <div class="logo" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 400; color: #000000;">Pema<span style="font-weight: 300; color: #000000;">Cleaning</span></div>
             <div class="nav-links" id="navLinks">
                 <a href="#home">Главная</a>
                 <a href="#services">Услуги</a>
+                <a href="#reviews">Отзывы</a>
                 <a href="#calculator">Калькулятор</a>
                 <a href="#contacts">Контакты</a>
             </div>
@@ -33,8 +32,8 @@
         </div>
     </nav>
 
-    <!-- Hero секция с принудительными стилями -->
-    <section id="home" class="hero" style="margin-top: 0; padding-top: 20px; min-height: 100vh; display: flex; align-items: center;">
+    <!-- Hero секция -->
+    <section id="home" class="hero">
         <!-- 3D-шары (задний фон) -->
         <div class="hero-background">
             <div class="shape shape-1"></div>
@@ -43,13 +42,18 @@
             <div class="shape shape-4"></div>
         </div>
         
-        <!-- ИКОНКИ ПОЛНОСТЬЮ УДАЛЕНЫ -->
-        
         <div class="container hero-container">
-            <div class="hero-content">  <!-- Убрал data-aos="fade-up" -->
-                <h1>Pema<span>Clean</span></h1>
-                <p class="hero-tagline">Чистота, которая чувствуется</p>
-                <p class="hero-description">Профессиональный клининг в Ростове-на-Дону. Прозрачные цены, только проверенные средства и забота о вашем доме.</p>
+            <div class="hero-content">
+                <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 400; color: #000000; margin-bottom: 5px;">Pema<span style="font-weight: 300; color: #000000;">Cleaning</span></h1>
+                
+                <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 400; color: #000000; font-size: 20px; margin-bottom: 15px;">Премиальный клининг домов, квартир и офисов</p>
+                
+                <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 400; color: #333333; font-size: 16px; line-height: 1.5; margin-bottom: 25px;">
+                    Команда профессионалов своего дела<br>
+                    Личный контроль - Пема Эльбердова<br>
+                    Ростов-на-Дону
+                </p>
+                
                 <div class="hero-actions">
                     <a href="#" class="btn-instagram" id="instagramBtn">
                         <i class="fab fa-instagram"></i> Instagram
@@ -94,6 +98,44 @@
         </div>
     </section>
 
+    <!-- Отзывы с админкой -->
+    <section id="reviews" class="reviews-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Отзывы наших клиентов</h2>
+            <p class="section-sub" data-aos="fade-up">Реальные отзывы от реальных людей</p>
+            
+            <!-- Форма добавления отзыва (без телефона) -->
+            <div class="review-form-container" data-aos="fade-up">
+                <h3>Оставить отзыв</h3>
+                <form id="reviewForm">
+                    <div class="form-row">
+                        <input type="text" id="reviewName" placeholder="Ваше имя" required>
+                    </div>
+                    <div class="form-row rating-row">
+                        <span>Оценка:</span>
+                        <div class="rating">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="reviewRating" value="5">
+                    </div>
+                    <div class="form-row">
+                        <textarea id="reviewText" placeholder="Ваш отзыв" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit-review">Отправить отзыв</button>
+                </form>
+            </div>
+
+            <!-- Список отзывов -->
+            <div class="reviews-grid" id="reviewsContainer">
+                <!-- Отзывы будут загружаться из localStorage -->
+            </div>
+        </div>
+    </section>
+
     <!-- Калькулятор -->
     <section id="calculator" class="calculator-section">
         <div class="container">
@@ -134,53 +176,14 @@
             </div>
         </div>
     </section>
-<style>
-    /* Экстренный фикс для мобильных */
-    @media (max-width: 768px) {
-        body, html {
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-        }
-        .hero {
-            min-height: 100vh !important;
-            display: flex !important;
-            align-items: center !important;
-            margin-top: 0 !important;
-            padding-top: 20px !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow-x: hidden !important;
-        }
-        .hero-content {
-            margin-top: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            padding-left: 15px !important;
-            padding-right: 15px !important;
-            box-sizing: border-box !important;
-        }
-        .container {
-            width: 100% !important;
-            max-width: 100% !important;
-            padding-left: 15px !important;
-            padding-right: 15px !important;
-            box-sizing: border-box !important;
-        }
-        .hero-container {
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-    }
-</style>
+
     <!-- Контакты -->
     <footer id="contacts" class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-info">
-                    <h3 class="footer-logo">Pema<span>Clean</span></h3>
-                    <p>Клининг в Ростове-на-Дону</p>
+                    <h3 class="footer-logo">Pema<span>Cleaning</span></h3>
+                    <p>Премиальный клининг в Ростове-на-Дону</p>
                 </div>
                 <div class="footer-social">
                     <a href="#" class="footer-link" id="instagramFooter">
@@ -192,7 +195,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 PemaClean — чистота с заботой о вас</p>
+                <p>© 2026 PemaCleaning — чистота с заботой о вас</p>
             </div>
         </div>
     </footer>
@@ -201,9 +204,5 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- Наш JS -->
     <script src="script.js"></script>
-    <script>
-        // Принудительная инициализация AOS без hero-блока
-        AOS.init({ duration: 800, once: true });
-    </script>
 </body>
 </html>

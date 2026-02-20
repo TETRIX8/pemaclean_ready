@@ -690,3 +690,337 @@ body {
         justify-content: center;
     }
 }
+
+/* Отзывы - плейсхолдер */
+.reviews-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.reviews-placeholder {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.placeholder-content {
+    background: linear-gradient(135deg, #F8F9FA, #FFFFFF);
+    border: 2px dashed #E07A5F;
+    border-radius: 40px;
+    padding: 60px 40px;
+}
+
+.placeholder-content i {
+    font-size: 32px;
+    color: #FFD700;
+    margin: 0 5px 20px;
+}
+
+.placeholder-content p {
+    font-size: 18px;
+    color: #4A4A4A;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        gap: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+    
+    .nav-links.show {
+        display: flex;
+    }
+    
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .hero {
+        min-height: auto;
+        padding: 40px 0 30px;
+        display: block;
+    }
+    
+    .hero-container {
+        padding: 0 15px;
+    }
+    
+    .hero-content {
+        padding: 30px 20px;
+        margin: 0 10px;
+    }
+    
+    .hero h1 {
+        font-size: 42px;
+    }
+    
+    .hero-tagline {
+        font-size: 18px;
+    }
+    
+    .hero-description {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .btn-instagram,
+    .btn-whatsapp {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+    
+    .shape-1 {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .shape-2 {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .shape-3 {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .shape-4 {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .price-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculator-body {
+        padding: 25px;
+    }
+    
+    .calculator-price-value {
+        font-size: 28px;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .footer-links {
+        justify-content: center;
+    }
+    
+    .placeholder-content {
+        padding: 40px 20px;
+    }
+    
+    .placeholder-content i {
+        font-size: 24px;
+    }
+    
+    .placeholder-content p {
+        font-size: 16px;
+    }
+}
+
+/* ===== ОТЗЫВЫ С ФОРМОЙ ===== */
+.reviews-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.review-form-container {
+    background: #F8F9FA;
+    border-radius: 30px;
+    padding: 40px;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.review-form-container h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #2C2C2C;
+}
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-row input,
+.form-row textarea {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #EDEDED;
+    border-radius: 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-row input:focus,
+.form-row textarea:focus {
+    outline: none;
+    border-color: #E07A5F;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.rating-row span {
+    font-weight: 500;
+    color: #4A4A4A;
+}
+
+.rating {
+    display: flex;
+    gap: 8px;
+}
+
+.rating i {
+    font-size: 28px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating i.fas {
+    color: #FFD700;
+}
+
+.btn-submit-review {
+    background: #E07A5F;
+    color: white;
+    border: none;
+    padding: 16px 30px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.btn-submit-review:hover {
+    background: #c5684e;
+    transform: translateY(-2px);
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.review-card {
+    background: #F8F9FA;
+    padding: 30px;
+    border-radius: 25px;
+    transition: all 0.3s;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.review-header i {
+    font-size: 48px;
+    color: #E07A5F;
+}
+
+.review-header h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #2C2C2C;
+}
+
+.review-stars {
+    color: #FFD700;
+    font-size: 14px;
+}
+
+.review-text {
+    color: #4A4A4A;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #999;
+    margin-top: 10px;
+    text-align: right;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: 60px;
+    background: #F8F9FA;
+    border-radius: 30px;
+    color: #999;
+    font-size: 18px;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .review-form-container {
+        padding: 25px;
+    }
+    
+    .rating-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .rating i {
+        font-size: 24px;
+    }
+    
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+}
