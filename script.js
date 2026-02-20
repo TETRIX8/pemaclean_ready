@@ -1,72 +1,55 @@
-// Данные услуг из прайса
+// Данные услуг
 const servicesData = {
-    windows: [
-        { name: "Обычное мытье окон", price: 500, unit: "м²" },
-        { name: "Мытье окон после ремонта", price: 700, unit: "м²" },
-        { name: "Сложные окна (обычные)", price: 700, unit: "м²" },
-        { name: "Сложные окна (после ремонта)", price: 900, unit: "м²" },
-        { name: "Мытье москитных сеток", price: 100, unit: "м²" },
-        { name: "Мытье оконных решеток", price: 100, unit: "м²" },
-        { name: "Удаление плёнки", price: 100, unit: "м²" },
-        { name: "Чистка рольставней", price: 1000, unit: "м²" },
-        { name: "Чистка жалюзи", price: 200, unit: "м²" }
-    ],
-    
-    house: [
-        { name: "Душевая кабина", price: 1000, unit: "шт" },
-        { name: "Межплиточные швы", price: 200, unit: "м²" },
-        { name: "Мытье унитаза (очистка от камня)", price: 1000, unit: "шт" },
-        { name: "Мытье люстры", price: 350, unit: "шт" },
-        { name: "Мытье потолка", price: 50, unit: "м²" },
-        { name: "Мытье пола", price: 50, unit: "м²" },
-        { name: "Мытье пола после ремонта", price: 70, unit: "м²" },
-        { name: "Чистка батарей (10 секций)", price: 500, unit: "шт" },
-        { name: "Кухонная стеновая панель", price: 1000, unit: "шт" },
-        { name: "Мытье посуды", price: 1000, unit: "час" },
-        { name: "Полная чистка вытяжки", price: 1000, unit: "шт" },
-        { name: "Чистка духовки", price: 1000, unit: "шт" },
-        { name: "Глажка", price: 1000, unit: "час" },
-        { name: "Порядок в гардеробе", price: 1000, unit: "час" },
-        { name: "Пропылесосить пол (после ремонта)", price: 30, unit: "м²" },
-        { name: "Постирать шторы (до 5м)", price: 1000, unit: "шт" },
-        { name: "Мытье стен", price: 50, unit: "м²" },
-        { name: "Мытье двора", price: 100, unit: "м²" },
-        { name: "Лестничная площадка", price: 0, unit: "инд", individual: true }
+    apartment: [
+        { name: "Генеральная уборка", price: 200, unit: "м²" },
+        { name: "Поддерживающая уборка", price: 150, unit: "м²" },
+        { name: "Уборка после ремонта", price: 250, unit: "м²" },
+        { name: "Сложная уборка (после пожара)", price: 350, unit: "м²" },
+        { name: "Кухня (комплексно)", price: 6000, unit: "шт" },
+        { name: "Ванная (комплексно)", price: 4000, unit: "шт" }
     ],
     
     furniture: [
         { name: "Стул со спинкой", price: 700, unit: "шт" },
-        { name: "Стул без спинки, табурет", price: 500, unit: "шт" },
+        { name: "Стул без спинки", price: 500, unit: "шт" },
         { name: "Пуфик", price: 800, unit: "шт" },
         { name: "Подушки от дивана", price: 250, unit: "шт" },
         { name: "Ковер, ковролин", price: 300, unit: "м²" },
         { name: "2-местный диван", price: 2500, unit: "шт" },
         { name: "3-местный диван", price: 3000, unit: "шт" },
         { name: "Угловой диван", price: 4000, unit: "шт" },
-        { name: "П-образный диван", price: 5000, unit: "шт" },
         { name: "Кресло", price: 1000, unit: "шт" },
         { name: "Кухонный уголок", price: 2500, unit: "шт" },
-        { name: "Матрас 2-спальный", price: 3500, unit: "шт" },
-        { name: "Матрас 1,5-спальный", price: 2500, unit: "шт" },
-        { name: "Матрас детский", price: 1500, unit: "шт" }
+        { name: "Матрас 2-спальный", price: 3500, unit: "шт" }
     ],
     
-    apartment: [
-        { name: "Генеральная уборка", price: 200, unit: "м²" },
-        { name: "Поддерживающая уборка", price: 150, unit: "м²" },
-        { name: "Уборка после ремонта", price: 250, unit: "м²" },
-        { name: "Сложная уборка (после пожара и т.д.)", price: 350, unit: "м²" },
-        { name: "Кухня (комплексно)", price: 6000, unit: "шт" },
-        { name: "Ванная (комплексно)", price: 4000, unit: "шт" }
+    windows: [
+        { name: "Обычное мытье окон", price: 500, unit: "м²" },
+        { name: "Мытье окон после ремонта", price: 700, unit: "м²" },
+        { name: "Сложные окна", price: 700, unit: "м²" },
+        { name: "Мытье москитных сеток", price: 100, unit: "м²" },
+        { name: "Чистка жалюзи", price: 200, unit: "м²" }
+    ],
+    
+    house: [
+        { name: "Душевая кабина", price: 1000, unit: "шт" },
+        { name: "Межплиточные швы", price: 200, unit: "м²" },
+        { name: "Мытье люстры", price: 350, unit: "шт" },
+        { name: "Мытье потолка", price: 50, unit: "м²" },
+        { name: "Мытье пола", price: 50, unit: "м²" },
+        { name: "Чистка батарей", price: 500, unit: "шт" },
+        { name: "Мытье посуды", price: 1000, unit: "час" },
+        { name: "Чистка духовки", price: 1000, unit: "шт" },
+        { name: "Глажка", price: 1000, unit: "час" }
     ]
 };
 
 // Все услуги для калькулятора
 const allServices = [
-    ...servicesData.windows,
-    ...servicesData.house,
+    ...servicesData.apartment,
     ...servicesData.furniture,
-    ...servicesData.apartment
+    ...servicesData.windows,
+    ...servicesData.house
 ];
 
 // Форматирование цены
@@ -78,45 +61,29 @@ function formatPrice(price) {
 function createPriceItem(service) {
     const div = document.createElement('div');
     div.className = 'price-item';
-    
-    let priceText = service.individual ? 'индивидуально' : `от ${service.price} ₽/${service.unit}`;
-    
     div.innerHTML = `
         <span class="price-item-name">${service.name}</span>
-        <span class="price-item-value">${priceText}</span>
+        <span class="price-item-value">от ${service.price} ₽/${service.unit}</span>
     `;
-    
     return div;
 }
 
 // Заполнение ценовых сеток
 function populatePriceGrids() {
-    const windowsGrid = document.getElementById('windows-prices');
-    if (windowsGrid) {
-        servicesData.windows.forEach(service => {
-            windowsGrid.appendChild(createPriceItem(service));
-        });
-    }
+    const grids = {
+        'apartment-prices': servicesData.apartment,
+        'furniture-prices': servicesData.furniture,
+        'windows-prices': servicesData.windows,
+        'house-prices': servicesData.house
+    };
     
-    const houseGrid = document.getElementById('house-prices');
-    if (houseGrid) {
-        servicesData.house.forEach(service => {
-            houseGrid.appendChild(createPriceItem(service));
-        });
-    }
-    
-    const furnitureGrid = document.getElementById('furniture-prices');
-    if (furnitureGrid) {
-        servicesData.furniture.forEach(service => {
-            furnitureGrid.appendChild(createPriceItem(service));
-        });
-    }
-    
-    const apartmentGrid = document.getElementById('apartment-prices');
-    if (apartmentGrid) {
-        servicesData.apartment.forEach(service => {
-            apartmentGrid.appendChild(createPriceItem(service));
-        });
+    for (const [id, services] of Object.entries(grids)) {
+        const grid = document.getElementById(id);
+        if (grid) {
+            services.forEach(service => {
+                grid.appendChild(createPriceItem(service));
+            });
+        }
     }
 }
 
@@ -128,10 +95,7 @@ function populateCalculator() {
     allServices.forEach((service, index) => {
         const option = document.createElement('option');
         option.value = index;
-        
-        let priceText = service.individual ? 'цена договорная' : `${service.price} ₽/${service.unit}`;
-        option.textContent = `${service.name} — ${priceText}`;
-        
+        option.textContent = `${service.name} — ${service.price} ₽/${service.unit}`;
         select.appendChild(option);
     });
 }
@@ -141,61 +105,44 @@ function updateCalculator() {
     const select = document.getElementById('serviceSelect');
     const quantity = parseFloat(document.getElementById('quantityInput').value) || 1;
     const priceElement = document.getElementById('calculatedPrice');
-    const unitHint = document.getElementById('unitHint');
     
     if (!select || select.selectedIndex === -1) return;
     
     const service = allServices[select.selectedIndex];
-    
-    if (service.individual) {
-        priceElement.textContent = 'по договоренности';
-        return;
-    }
-    
     const total = service.price * quantity;
     priceElement.textContent = formatPrice(total);
-    
-    if (unitHint) {
-        unitHint.textContent = `(${service.unit})`;
-    }
 }
 
-// ========== ИСПРАВЛЕННАЯ ОТПРАВКА В WHATSAPP ==========
-function sendToWhatsApp(message) {
-    const phone = '79064883194'; // Заменить на номер заказчика
-    
-    // Очищаем номер от лишних символов
-    const cleanPhone = phone.replace(/\D/g, '');
-    
-    // Кодируем сообщение
-    const encodedMessage = encodeURIComponent(message);
-    
-    // Вариант 1: Универсальная ссылка wa.me (работает и на телефонах, и на ПК)
-    const waMeUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
-    
-    // Вариант 2: Для мобильных приложений (глубокие ссылки)
-    const intentUrl = `intent://send/${cleanPhone}?text=${encodedMessage}#Intent;package=com.whatsapp;scheme=smsto;end;`;
-    
-    // Вариант 3: WhatsApp Web (если не сработают первые два)
-    const webUrl = `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodedMessage}`;
-    
-    // Определяем, открывать ссылку или показать предупреждение
+// ===== УНИВЕРСАЛЬНЫЕ ССЫЛКИ =====
+
+// Instagram (работает на всех устройствах)
+function openInstagram() {
+    const username = 'recepti.pema';
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile) {
-        // На мобильных пробуем открыть приложение через wa.me (самый надежный способ)
-        window.location.href = waMeUrl;
-        
-        // Если через 2 секунды приложение не открылось, показываем подсказку
+        window.location.href = `instagram://user?username=${username}`;
         setTimeout(() => {
-            if (!document.hidden) {
-                alert('Если WhatsApp не открылся, нажмите "OK" чтобы открыть в браузере');
-                window.open(webUrl, '_blank');
-            }
-        }, 2000);
+            window.open(`https://instagram.com/${username}`, '_blank');
+        }, 1000);
     } else {
-        // На компьютере открываем WhatsApp Web
-        window.open(webUrl, '_blank');
+        window.open(`https://instagram.com/${username}`, '_blank');
+    }
+}
+
+// WhatsApp (работает на всех устройствах)
+function openWhatsApp() {
+    const phone = '79064883194';
+    const message = 'Здравствуйте! Хочу заказать уборку';
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        window.location.href = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
+        setTimeout(() => {
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        }, 1000);
+    } else {
+        window.open(`https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`, '_blank');
     }
 }
 
@@ -217,39 +164,42 @@ function setupMobileMenu() {
     }
 }
 
-// ========== ОБРАБОТКА КНОПОК WHATSAPP В HTML ==========
-function setupWhatsAppButtons() {
-    // Находим все ссылки на WhatsApp и заменяем их на наш универсальный обработчик
-    document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp"]').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Извлекаем текст сообщения из ссылки, если есть
-            const url = new URL(link.href);
-            const text = url.searchParams.get('text') || 'Здравствуйте! Хочу заказать уборку';
-            
-            sendToWhatsApp(text);
-        });
-    });
-}
-
 // Инициализация
 document.addEventListener('DOMContentLoaded', function() {
-    AOS.init({
-        duration: 800,
-        once: true,
-        disable: 'mobile'
-    });
+    AOS.init({ duration: 800, once: true });
     
     populatePriceGrids();
     populateCalculator();
     updateCalculator();
     setupMobileMenu();
-    setupWhatsAppButtons(); // Добавляем обработку кнопок
     
+    // Обработчики для Instagram
+    document.getElementById('instagramBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openInstagram();
+    });
+    
+    document.getElementById('instagramFooter')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openInstagram();
+    });
+    
+    // Обработчики для WhatsApp
+    document.getElementById('whatsappBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openWhatsApp();
+    });
+    
+    document.getElementById('whatsappFooter')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openWhatsApp();
+    });
+    
+    // Калькулятор
     document.getElementById('serviceSelect')?.addEventListener('change', updateCalculator);
     document.getElementById('quantityInput')?.addEventListener('input', updateCalculator);
     
+    // Заказ из калькулятора
     document.getElementById('orderFromCalculator')?.addEventListener('click', function() {
         const select = document.getElementById('serviceSelect');
         const quantity = document.getElementById('quantityInput').value;
@@ -258,12 +208,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!select || select.selectedIndex === -1) return;
         
         const service = allServices[select.selectedIndex];
+        const message = `Здравствуйте! Хочу заказать уборку:\nУслуга: ${service.name}\nКоличество: ${quantity} ${service.unit}\nСтоимость: ${price}`;
         
-        let message = `Здравствуйте! Хочу заказать уборку:\n`;
-        message += `Услуга: ${service.name}\n`;
-        message += `Количество: ${quantity} ${service.unit}\n`;
-        message += `Примерная стоимость: ${price}`;
-        
-        sendToWhatsApp(message);
+        const phone = '79064883194';
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
     });
 });
