@@ -1,0 +1,463 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #FAF7F5;
+    color: #2C2C2C;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Навигация (мобильная) */
+.navbar {
+    background: white;
+    padding: 16px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #E07A5F;
+    letter-spacing: -0.5px;
+}
+
+.logo span {
+    color: #2C2C2C;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-links a {
+    color: #4A4A4A;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: #E07A5F;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #2C2C2C;
+    cursor: pointer;
+}
+
+/* Hero */
+.hero {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #FAF7F5 0%, #FFFFFF 100%);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+}
+
+.hero h1 span {
+    color: #E07A5F;
+}
+
+.hero-tagline {
+    font-size: clamp(18px, 4vw, 24px);
+    color: #E07A5F;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.hero-description {
+    font-size: clamp(16px, 3vw, 18px);
+    color: #6B6B6B;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 16px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 16px;
+}
+
+.btn-social {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 32px;
+    border-radius: 60px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    min-width: 200px;
+    transition: all 0.2s;
+}
+
+.btn-instagram {
+    background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
+    color: white;
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: white;
+}
+
+.btn-social:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background: #E07A5F;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 60px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: #c5684e;
+    transform: scale(0.98);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Секции */
+.section-title {
+    font-size: clamp(28px, 6vw, 40px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.section-sub {
+    text-align: center;
+    color: #6B6B6B;
+    font-size: clamp(14px, 3vw, 18px);
+    margin-bottom: 40px;
+}
+
+/* Ценовые сетки */
+.price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.price-item {
+    background: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #EDEDED;
+    transition: all 0.2s;
+    font-size: 15px;
+}
+
+.price-item:hover {
+    border-color: #E07A5F;
+    transform: translateX(4px);
+}
+
+.price-item-name {
+    font-weight: 500;
+    color: #2C2C2C;
+    padding-right: 12px;
+}
+
+.price-item-value {
+    font-weight: 600;
+    color: #E07A5F;
+    white-space: nowrap;
+}
+
+.category-title {
+    font-size: 24px;
+    margin: 40px 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #EDEDED;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.category-title i {
+    color: #E07A5F;
+    font-size: 24px;
+}
+
+/* Калькулятор */
+.calculator-section {
+    background: white;
+    padding: 60px 0;
+    margin-top: 20px;
+}
+
+.calculator-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #FAF7F5;
+    padding: 32px 24px;
+    border-radius: 32px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4A4A4A;
+    font-size: 15px;
+}
+
+.calculator-select,
+.calculator-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1.5px solid #EDEDED;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    background: white;
+    transition: all 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.calculator-select:focus,
+.calculator-input:focus {
+    outline: none;
+    border-color: #E07A5F;
+}
+
+.input-hint {
+    font-size: 13px;
+    color: #9CA3AF;
+    margin-top: 4px;
+    display: block;
+}
+
+.calculator-result {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 32px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    border: 1px solid #EDEDED;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.result-price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #E07A5F;
+}
+
+/* Футер */
+.footer {
+    background: #2C2C2C;
+    color: white;
+    padding: 40px 0 20px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.footer-logo span {
+    color: #E07A5F;
+}
+
+.footer-info p {
+    color: #B0B0B0;
+    font-size: 14px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.footer-link {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+    font-size: 15px;
+}
+
+.footer-link:hover {
+    color: #E07A5F;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #404040;
+    color: #B0B0B0;
+    font-size: 13px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        gap: 16px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-radius: 0 0 24px 24px;
+    }
+    
+    .nav-links.show {
+        display: flex;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-social {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .price-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .price-item {
+        padding: 14px 16px;
+    }
+    
+    .category-title {
+        font-size: 20px;
+        margin: 30px 0 16px;
+    }
+    
+    .calculator-card {
+        padding: 24px 16px;
+    }
+    
+    .calculator-result {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-social {
+        justify-content: center;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 380px) {
+    .logo {
+        font-size: 20px;
+    }
+    
+    .hero h1 {
+        font-size: 36px;
+    }
+    
+    .price-item {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    
+    .price-item-value {
+        align-self: flex-end;
+    }
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>PemaClean | Клининг в Ростове-на-Дону</title>
+    <!-- Шрифт Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Навигация (адаптивная) -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">Pema<span>Clean</span></div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home">Главная</a>
+                <a href="#services">Услуги</a>
+                <a href="#calculator">Калькулятор</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero секция (только соцсети) -->
+    <section id="home" class="hero">
+        <div class="container hero-container">
+            <div class="hero-content" data-aos="fade-up">
+                <h1>Pema<span>Clean</span></h1>
+                <p class="hero-tagline">Чистота, которая чувствуется</p>
+                <p class="hero-description">Профессиональный клининг в Ростове-на-Дону. Прозрачные цены, только проверенные средства и забота о вашем доме.</p>
+                <div class="hero-actions">
+                    <a href="https://instagram.com/recepti.pema" target="_blank" class="btn-social btn-instagram">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://wa.me/79064883194?text=Здравствуйте!%20Хочу%20заказать%20уборку" target="_blank" class="btn-social btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги и цены -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Наши услуги и цены</h2>
+            <p class="section-sub" data-aos="fade-up">Прозрачно, честно, без скрытых платежей</p>
+            
+            <!-- Мытьё окон -->
+            <h3 class="category-title" data-aos="fade-right">
+                <i class="fas fa-wind"></i> Мытьё окон
+            </h3>
+            <div class="price-grid" id="windows-prices"></div>
+            
+            <!-- Услуги по дому -->
+            <h3 class="category-title" data-aos="fade-right">
+                <i class="fas fa-home"></i> Услуги по дому
+            </h3>
+            <div class="price-grid" id="house-prices"></div>
+            
+            <!-- Химчистка мебели -->
+            <h3 class="category-title" data-aos="fade-right">
+                <i class="fas fa-couch"></i> Химчистка мебели
+            </h3>
+            <div class="price-grid" id="furniture-prices"></div>
+            
+            <!-- Уборка квартир -->
+            <h3 class="category-title" data-aos="fade-right">
+                <i class="fas fa-building"></i> Уборка квартир
+            </h3>
+            <div class="price-grid" id="apartment-prices"></div>
+        </div>
+    </section>
+
+    <!-- Калькулятор -->
+    <section id="calculator" class="calculator-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Калькулятор стоимости</h2>
+            <p class="section-sub" data-aos="fade-up">Выберите услугу и укажите объём</p>
+            
+            <div class="calculator-card" data-aos="flip-up">
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label for="serviceSelect">Тип услуги</label>
+                        <select id="serviceSelect" class="calculator-select">
+                            <!-- JS заполнит -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantityInput">Количество / Площадь</label>
+                        <input type="number" id="quantityInput" class="calculator-input" value="1" min="0.5" step="0.5">
+                        <span class="input-hint" id="unitHint">(м²)</span>
+                    </div>
+                    
+                    <div class="calculator-result">
+                        <span>Примерная стоимость:</span>
+                        <span class="result-price" id="calculatedPrice">0 ₽</span>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-block" id="orderFromCalculator">
+                        <i class="fab fa-whatsapp"></i> Заказать в WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <footer id="contacts" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3 class="footer-logo">Pema<span>Clean</span></h3>
+                    <p>Клининг в Ростове-на-Дону</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://instagram.com/recepti.pema" target="_blank" class="footer-link">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://wa.me/79064883194?text=Здравствуйте!%20Хочу%20заказать%20уборку" target="_blank" class="footer-link">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 PemaClean — чистота с заботой о вас</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Наш JS -->
+    <script src="script.js"></script>
+</body>
+</html>
