@@ -14,26 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <!-- Принудительные стили прямо в HTML -->
-    <style>
-        /* Экстренный фикс для мобильных */
-        @media (max-width: 768px) {
-            body, html {
-                overflow-x: hidden;
-                margin: 0;
-                padding: 0;
-            }
-            .hero {
-                min-height: 100vh !important;
-                display: flex !important;
-                align-items: center !important;
-                margin-top: 0 !important;
-                padding-top: 20px !important;
-            }
-            .hero-content {
-                margin-top: 0 !important;
-            }
-        }
-    </style>
+    
 </head>
 <body>
     <!-- Навигация -->
@@ -153,7 +134,46 @@
             </div>
         </div>
     </section>
-
+<style>
+    /* Экстренный фикс для мобильных */
+    @media (max-width: 768px) {
+        body, html {
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        .hero {
+            min-height: 100vh !important;
+            display: flex !important;
+            align-items: center !important;
+            margin-top: 0 !important;
+            padding-top: 20px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+        .hero-content {
+            margin-top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+            box-sizing: border-box !important;
+        }
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+            box-sizing: border-box !important;
+        }
+        .hero-container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+</style>
     <!-- Контакты -->
     <footer id="contacts" class="footer">
         <div class="container">
