@@ -620,4 +620,73 @@ body {
     color: #777;
 }
 
- 
+ /* Мобильная адаптация */
+@media (max-width: 768px) {
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+        padding: 10px 0;
+    }
+    
+    .nav-links a {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .hero-content {
+        padding: 30px 15px;
+    }
+    
+    .hero h1 {
+        font-size: 42px;
+    }
+    
+    .hero-tagline {
+        font-size: 18px;
+    }
+    
+    .hero-description {
+        font-size: 15px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-instagram,
+    .btn-whatsapp {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+    
+    .price-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculator-body {
+        padding: 25px;
+    }
+    
+    .calculator-price-value {
+        font-size: 28px;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .footer-social {
+        justify-content: center;
+    }
+}
