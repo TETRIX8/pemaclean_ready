@@ -620,8 +620,8 @@ body {
     color: #777;
 }
 
-/* Мобильная адаптация */
 @media (max-width: 768px) {
+    /* Навигация */
     .nav-links {
         display: none;
         position: absolute;
@@ -632,8 +632,8 @@ body {
         flex-direction: column;
         padding: 20px;
         gap: 10px;
-        box-shadow: 0 20px 30px rgba(0,0,0,0.1);
-        border-radius: 0 0 30px 30px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        z-index: 1000;
     }
     
     .nav-links.show {
@@ -652,31 +652,68 @@ body {
         justify-content: center;
     }
     
+    /* Hero секция - ИСПРАВЛЕНО */
     .hero {
         min-height: auto;
-        padding: 60px 0;
+        padding: 40px 0 30px;
+        display: block;
+    }
+    
+    .hero-container {
+        padding: 0 15px;
     }
     
     .hero-content {
         padding: 30px 20px;
+        margin: 0 10px;
     }
     
-    .hero-actions {
+    .hero h1 {
+        font-size: 42px;
+    }
+    
+    .hero-tagline {
+        font-size: 18px;
+    }
+    
+    .hero-description {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .hero-buttons {
         flex-direction: column;
+        gap: 12px;
     }
     
-    .btn-instagram,
-    .btn-whatsapp {
+    .btn {
         width: 100%;
         justify-content: center;
+        padding: 14px 20px;
     }
     
-    .icon-bubble {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+    /* 3D-шары на мобильных */
+    .shape-1 {
+        width: 300px;
+        height: 300px;
     }
     
+    .shape-2 {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .shape-3 {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .shape-4 {
+        width: 200px;
+        height: 200px;
+    }
+    
+    /* Калькулятор */
     .calculator-body {
         padding: 25px;
     }
@@ -685,8 +722,14 @@ body {
         font-size: 28px;
     }
     
+    /* Футер */
     .footer-content {
         flex-direction: column;
         text-align: center;
+        gap: 20px;
+    }
+    
+    .footer-links {
+        justify-content: center;
     }
 }
