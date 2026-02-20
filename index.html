@@ -13,6 +13,27 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- Принудительные стили прямо в HTML -->
+    <style>
+        /* Экстренный фикс для мобильных */
+        @media (max-width: 768px) {
+            body, html {
+                overflow-x: hidden;
+                margin: 0;
+                padding: 0;
+            }
+            .hero {
+                min-height: 100vh !important;
+                display: flex !important;
+                align-items: center !important;
+                margin-top: 0 !important;
+                padding-top: 20px !important;
+            }
+            .hero-content {
+                margin-top: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Навигация -->
@@ -31,9 +52,9 @@
         </div>
     </nav>
 
-    <!-- Hero секция с 3D-абстракцией и иконками -->
-    <section id="home" class="hero">
-        <!-- 3D-шары (задний фон) -->
+    <!-- Hero секция с принудительными стилями (БЕЗ ЛЕТАЮЩИХ ИКОНОК) -->
+    <section id="home" class="hero" style="margin-top: 0; padding-top: 20px; min-height: 100vh; display: flex; align-items: center;">
+        <!-- Только 3D-шары (задний фон) -->
         <div class="hero-background">
             <div class="shape shape-1"></div>
             <div class="shape shape-2"></div>
@@ -41,11 +62,10 @@
             <div class="shape shape-4"></div>
         </div>
         
-        <!-- Парящие иконки (средний план) -->
-       
+        <!-- ЛЕТАЮЩИЕ ИКОНКИ ПОЛНОСТЬЮ УДАЛЕНЫ -->
         
         <div class="container hero-container">
-            <div class="hero-content" data-aos="fade-up">
+            <div class="hero-content">  <!-- Убрал data-aos="fade-up" -->
                 <h1>Pema<span>Clean</span></h1>
                 <p class="hero-tagline">Чистота, которая чувствуется</p>
                 <p class="hero-description">Профессиональный клининг в Ростове-на-Дону. Прозрачные цены, только проверенные средства и забота о вашем доме.</p>
@@ -161,5 +181,9 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- Наш JS -->
     <script src="script.js"></script>
+    <script>
+        // Принудительная инициализация AOS без hero-блока
+        AOS.init({ duration: 800, once: true });
+    </script>
 </body>
 </html>
