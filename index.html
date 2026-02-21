@@ -22,7 +22,7 @@
             <div class="nav-links" id="navLinks">
                 <a href="#home">Главная</a>
                 <a href="#services">Услуги</a>
-                <a href="#reviews">Отзывы</a>
+                <a href="reviews.html">Отзывы</a>
                 <a href="#calculator">Калькулятор</a>
                 <a href="#contacts">Контакты</a>
             </div>
@@ -98,41 +98,18 @@
         </div>
     </section>
 
-    <!-- Отзывы с админкой -->
-    <section id="reviews" class="reviews-section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Отзывы наших клиентов</h2>
-            <p class="section-sub" data-aos="fade-up">Реальные отзывы от реальных людей</p>
-            
-            <!-- Форма добавления отзыва (без телефона) -->
-            <div class="review-form-container" data-aos="fade-up">
-                <h3>Оставить отзыв</h3>
-                <form id="reviewForm">
-                    <div class="form-row">
-                        <input type="text" id="reviewName" placeholder="Ваше имя" required>
-                    </div>
-                    <div class="form-row rating-row">
-                        <span>Оценка:</span>
-                        <div class="rating">
-                            <i class="far fa-star" data-rating="1"></i>
-                            <i class="far fa-star" data-rating="2"></i>
-                            <i class="far fa-star" data-rating="3"></i>
-                            <i class="far fa-star" data-rating="4"></i>
-                            <i class="far fa-star" data-rating="5"></i>
-                        </div>
-                        <input type="hidden" id="reviewRating" value="5">
-                    </div>
-                    <div class="form-row">
-                        <textarea id="reviewText" placeholder="Ваш отзыв" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-submit-review">Отправить отзыв</button>
-                </form>
-            </div>
-
-            <!-- Список отзывов -->
-            <div class="reviews-grid" id="reviewsContainer">
-                <!-- Отзывы будут загружаться из localStorage -->
-            </div>
+   
+           <section id="reviews" class="reviews-section">
+<div class="container">
+<h2 class="section-title" data-aos="fade-up">Отзывы наших клиентов</h2>
+<p class="section-sub" data-aos="fade-up">Посмотрите реальные результаты нашей работы</p>
+<div style="text-align: center;" data-aos="fade-up">
+<a href="reviews.html" class="btn-instagram" style="margin: 0 auto; display:inline-flex;">
+<i class="fas fa-images"></i> Смотреть все отзывы с фото
+</a>
+</div>
+</div>
+</section>
         </div>
     </section>
 
