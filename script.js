@@ -1,6 +1,5 @@
-// Данные услуг из прайса (48 услуг)
+// ===== ДАННЫЕ УСЛУГ =====
 const servicesData = {
-    // Уборка квартир (6 услуг)
     apartment: [
         { name: "Генеральная уборка", price: 200, unit: "м²" },
         { name: "Поддерживающая уборка", price: 150, unit: "м²" },
@@ -9,8 +8,6 @@ const servicesData = {
         { name: "Кухня (комплексно)", price: 6000, unit: "шт" },
         { name: "Ванная (комплексно)", price: 4000, unit: "шт" }
     ],
-    
-    // Химчистка мебели (14 услуг)
     furniture: [
         { name: "Стул со спинкой", price: 700, unit: "шт" },
         { name: "Стул без спинки", price: 500, unit: "шт" },
@@ -27,8 +24,6 @@ const servicesData = {
         { name: "Матрас 1,5-спальный", price: 2500, unit: "шт" },
         { name: "Матрас детский", price: 1500, unit: "шт" }
     ],
-    
-    // Мытьё окон (9 услуг)
     windows: [
         { name: "Обычное мытье окон", price: 500, unit: "м²" },
         { name: "Мытье окон после ремонта", price: 700, unit: "м²" },
@@ -40,8 +35,6 @@ const servicesData = {
         { name: "Чистка рольставней", price: 1000, unit: "м²" },
         { name: "Чистка жалюзи", price: 200, unit: "м²" }
     ],
-    
-    // Дополнительные услуги (19 услуг)
     house: [
         { name: "Душевая кабина", price: 1000, unit: "шт" },
         { name: "Межплиточные швы", price: 200, unit: "м²" },
@@ -65,34 +58,21 @@ const servicesData = {
     ]
 };
 
-// Все услуги для калькулятора
-const allServices = [
-    ...servicesData.apartment,
-    ...servicesData.furniture,
-    ...servicesData.windows,
-    ...servicesData.house
-];
+const allServices = [...servicesData.apartment, ...servicesData.furniture, ...servicesData.windows, ...servicesData.house];
 
-// Форматирование цены
+// ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 function formatPrice(price) {
     return price.toLocaleString('ru-RU') + ' ₽';
 }
 
-// Создание элемента цены
 function createPriceItem(service) {
     const div = document.createElement('div');
     div.className = 'price-item';
-    
     let priceText = service.individual ? 'индивидуально' : `от ${service.price} ₽/${service.unit}`;
-    
-    div.innerHTML = `
-        <span class="price-item-name">${service.name}</span>
-        <span class="price-item-value">${priceText}</span>
-    `;
+    div.innerHTML = `<span class="price-item-name">${service.name}</span><span class="price-item-value">${priceText}</span>`;
     return div;
 }
 
-// Заполнение ценовых сеток
 function populatePriceGrids() {
     const grids = {
         'apartment-prices': servicesData.apartment,
@@ -100,282 +80,437 @@ function populatePriceGrids() {
         'windows-prices': servicesData.windows,
         'house-prices': servicesData.house
     };
-    
     for (const [id, services] of Object.entries(grids)) {
         const grid = document.getElementById(id);
         if (grid) {
             grid.innerHTML = '';
-            services.forEach(service => {
-                grid.appendChild(createPriceItem(service));
-            });
+            services.forEach(service => grid.appendChild(createPriceItem(service)));
         }
     }
 }
 
-// Заполнение калькулятора
 function populateCalculator() {
     const select = document.getElementById('serviceSelect');
     if (!select) return;
-    
     select.innerHTML = '';
-    
     allServices.forEach((service, index) => {
         const option = document.createElement('option');
         option.value = index;
-        
         let priceText = service.individual ? 'цена договорная' : `${service.price} ₽/${service.unit}`;
         option.textContent = `${service.name} — ${priceText}`;
-        
         select.appendChild(option);
     });
 }
 
-// Обновление калькулятора
 function updateCalculator() {
     const select = document.getElementById('serviceSelect');
-    const quantity = parseFloat(document.getElementById('quantityInput').value) || 1;
+    const quantity = parseFloat(document.getElementById('quantityInput')?.value) || 1;
     const priceElement = document.getElementById('calculatedPrice');
-    
-    if (!select || select.selectedIndex === -1) return;
-    
+    if (!select || !priceElement) return;
+    if (select.selectedIndex === -1) return;
     const service = allServices[select.selectedIndex];
-    
     if (service.individual) {
         priceElement.textContent = 'по договоренности';
         return;
     }
-    
     const total = service.price * quantity;
     priceElement.textContent = formatPrice(total);
 }
 
-// ===== СИСТЕМА ОТЗЫВОВ С АДМИНКОЙ =====
+// ===== СЖАТИЕ ФОТО =====
+function compressImage(file, maxWidth = 800, quality = 0.7) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+                if (width > maxWidth) {
+                    height = (maxWidth / width) * height;
+                    width = maxWidth;
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+        };
+    });
+}
 
-// Проверка, является ли пользователь админом (по ссылке #admin)
+// ===== ОТЗЫВЫ С ФОТО =====
+let photoBefore = null;
+let photoAfter = null;
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+}
+
 function isAdmin() {
     return window.location.hash === '#admin';
 }
 
-// Загрузка отзывов из localStorage
 function loadReviews() {
-    const savedReviews = localStorage.getItem('pemaCleaningReviews');
-    return savedReviews ? JSON.parse(savedReviews) : [];
+    const saved = localStorage.getItem('pemaCleaningReviews');
+    return saved ? JSON.parse(saved) : [];
 }
 
-// Сохранение отзывов в localStorage
 function saveReviews(reviews) {
     localStorage.setItem('pemaCleaningReviews', JSON.stringify(reviews));
 }
 
-// Удаление отзыва (только для админа)
 window.deleteReview = function(reviewId) {
     if (!isAdmin()) {
         alert('У вас нет прав для удаления');
         return;
     }
-    
     if (confirm('Удалить этот отзыв?')) {
         const reviews = loadReviews();
-        const updatedReviews = reviews.filter(r => r.id !== reviewId);
-        saveReviews(updatedReviews);
+        const updated = reviews.filter(r => r.id !== reviewId);
+        saveReviews(updated);
         displayReviews();
     }
 };
 
-// Отображение отзывов
+function openFullscreen(imgSrc, label) {
+    // Создаем модальное окно
+    const modal = document.createElement('div');
+    modal.className = 'fullscreen-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img src="${imgSrc}" alt="${label}">
+            <div class="modal-label">${label}</div>
+        </div>
+    `;
+    
+    // Добавляем на страницу
+    document.body.appendChild(modal);
+    
+    // Закрытие по клику на крестик
+    modal.querySelector('.close-modal').addEventListener('click', () => {
+        modal.remove();
+    });
+    
+    // Закрытие по клику вне фото
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Закрытие по ESC
+    document.addEventListener('keydown', function escHandler(e) {
+        if (e.key === 'Escape') {
+            modal.remove();
+            document.removeEventListener('keydown', escHandler);
+        }
+    });
+}
+
+window.handlePhotoUpload = async function(input, type) {
+    const file = input.files[0];
+    if (!file || !file.type.startsWith('image/')) {
+        alert('Пожалуйста, выберите изображение');
+        return;
+    }
+
+    try {
+        const compressed = await compressImage(file, 1080, 0.8);
+        const previewImg = document.getElementById(type === 'before' ? 'previewBefore' : 'previewAfter');
+        const uploadArea = document.getElementById(type === 'before' ? 'uploadAreaBefore' : 'uploadAreaAfter');
+        const removeBtn = document.getElementById(type === 'before' ? 'removeBefore' : 'removeAfter');
+
+        if (type === 'before') {
+            photoBefore = compressed;
+        } else {
+            photoAfter = compressed;
+        }
+
+        if (previewImg) {
+            previewImg.src = compressed;
+            previewImg.style.display = 'block';
+        }
+
+        if (uploadArea) {
+            const placeholder = uploadArea.querySelector('.upload-placeholder');
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+        }
+
+        if (removeBtn) {
+            removeBtn.style.display = 'inline-flex';
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки фото:', error);
+        alert('Ошибка при загрузке фото');
+    }
+};
+
+window.removePhoto = function(type) {
+    const previewImg = document.getElementById(type === 'before' ? 'previewBefore' : 'previewAfter');
+    const uploadArea = document.getElementById(type === 'before' ? 'uploadAreaBefore' : 'uploadAreaAfter');
+    const input = document.getElementById(type === 'before' ? 'photoBefore' : 'photoAfter');
+    const removeBtn = document.getElementById(type === 'before' ? 'removeBefore' : 'removeAfter');
+
+    if (type === 'before') {
+        photoBefore = null;
+    } else {
+        photoAfter = null;
+    }
+
+    if (previewImg) {
+        previewImg.src = '';
+        previewImg.style.display = 'none';
+    }
+
+    if (uploadArea) {
+        const placeholder = uploadArea.querySelector('.upload-placeholder');
+        if (placeholder) {
+            placeholder.style.display = 'flex';
+        }
+    }
+
+    if (removeBtn) {
+        removeBtn.style.display = 'none';
+    }
+
+    if (input) {
+        input.value = '';
+    }
+};
+
+function getPhotosFromForm() {
+    const photos = [];
+    if (photoBefore) photos.push(photoBefore);
+    if (photoAfter) photos.push(photoAfter);
+    return photos;
+}
+
 function displayReviews() {
     const container = document.getElementById('reviewsContainer');
     if (!container) return;
-    
     const reviews = loadReviews();
     const admin = isAdmin();
-    
     if (reviews.length === 0) {
         container.innerHTML = '<div class="no-reviews">Пока нет отзывов. Будьте первым!</div>';
         return;
     }
-    
-    container.innerHTML = reviews.map(review => `
-        <div class="review-card" data-aos="fade-up">
-            <div class="review-header">
-                <i class="fas fa-user-circle"></i>
-                <div>
-                    <h4>${review.name}</h4>
-                    <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+    container.innerHTML = reviews.map(review => {
+        const hasPhotos = review.photos && review.photos.length > 0;
+        
+        // Формируем HTML для фото с правильными обработчиками кликов
+        let photosHtml = '';
+        if (hasPhotos) {
+            if (review.photos.length === 1) {
+                photosHtml = `
+                    <div class="review-photos">
+                        <div class="review-photo-item review-photo-single" onclick="openFullscreen('${review.photos[0]}', 'Фото')">
+                            <img src="${review.photos[0]}" alt="photo">
+                            <span class="review-photo-label">Фото</span>
+                        </div>
+                    </div>`;
+            } else {
+                photosHtml = `
+                    <div class="review-photos">
+                        <div class="review-photo-item" onclick="openFullscreen('${review.photos[0]}', 'До')">
+                            <img src="${review.photos[0]}" alt="до">
+                            <span class="review-photo-label">До</span>
+                        </div>
+                        <div class="review-photo-item" onclick="openFullscreen('${review.photos[1] || review.photos[0]}', 'После')">
+                            <img src="${review.photos[1] || review.photos[0]}" alt="после">
+                            <span class="review-photo-label">После</span>
+                        </div>
+                    </div>`;
+            }
+        }
+        
+        return `
+            <div class="review-card" data-aos="fade-up">
+                <div class="review-header">
+                    <div class="review-avatar">${getInitials(review.name)}</div>
+                    <div>
+                        <h4>${review.name}</h4>
+                        <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+                    </div>
                 </div>
-            </div>
-            <p class="review-text">"${review.text}"</p>
-            <div class="review-footer">
-                <span class="review-date">${review.date}</span>
-                ${admin ? `<button class="delete-review-btn" onclick="deleteReview('${review.id}')"><i class="fas fa-trash"></i> Удалить</button>` : ''}
-            </div>
-        </div>
-    `).join('');
+                <p class="review-text">"${review.text}"</p>
+                ${photosHtml}
+                <div class="review-footer">
+                    <span class="review-date">${review.date}</span>
+                    ${admin ? `<button class="delete-review-btn" onclick="deleteReview('${review.id}')"><i class="fas fa-trash"></i> Удалить</button>` : ''}
+                </div>
+            </div>`;
+    }).join('');
 }
 
-// Добавление нового отзыва
-function addReview(name, rating, text) {
+function addReview(name, rating, text, photos) {
     const reviews = loadReviews();
-    
     const newReview = {
         id: Date.now().toString(),
-        name: name,
-        rating: rating,
-        text: text,
+        name,
+        rating: parseInt(rating),
+        text,
+        photos: photos || [],
         date: new Date().toLocaleDateString('ru-RU')
     };
-    
     reviews.unshift(newReview);
     saveReviews(reviews);
     displayReviews();
 }
 
-// Настройка рейтинга (звездочки)
-function setupRating() {
-    const stars = document.querySelectorAll('.rating i');
-    const ratingInput = document.getElementById('reviewRating');
-    
-    stars.forEach(star => {
-        star.addEventListener('click', function() {
-            const rating = this.dataset.rating;
-            ratingInput.value = rating;
-            
-            stars.forEach(s => {
-                s.className = s.dataset.rating <= rating ? 'fas fa-star' : 'far fa-star';
-            });
-        });
-    });
-}
-
-// ===== Instagram и WhatsApp =====
-
-// Instagram
+// ===== СОЦСЕТИ =====
 function openInstagram() {
     const username = 'pema_cleaning';
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
     if (isMobile) {
         window.location.href = `instagram://user?username=${username}`;
-        setTimeout(() => {
-            window.open(`https://instagram.com/${username}`, '_blank');
-        }, 1000);
+        setTimeout(() => window.open(`https://instagram.com/${username}`, '_blank'), 1000);
     } else {
         window.open(`https://instagram.com/${username}`, '_blank');
     }
 }
 
-// WhatsApp
 function openWhatsApp() {
     const phone = '79064883194';
     const message = 'Здравствуйте! Хочу заказать уборку';
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
     if (isMobile) {
         window.location.href = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
-        setTimeout(() => {
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-        }, 1000);
+        setTimeout(() => window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank'), 1000);
     } else {
         window.open(`https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`, '_blank');
     }
 }
 
-// Мобильное меню
+// ===== МОБИЛЬНОЕ МЕНЮ =====
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobileMenuBtn');
     const navLinks = document.getElementById('navLinks');
-    
     if (menuBtn && navLinks) {
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('show');
-        });
-        
+        menuBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('show');
-            });
+            link.addEventListener('click', () => navLinks.classList.remove('show'));
         });
     }
 }
 
-// Инициализация
+// ===== ФУНКЦИЯ ДЛЯ ОПРЕДЕЛЕНИЯ СТРАНИЦЫ =====
+function getCurrentPage() {
+    const path = window.location.pathname;
+    if (path.includes('reviews.html')) return 'reviews';
+    return 'main';
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', function() {
-    AOS.init({ duration: 800, once: true });
+    console.log('✅ DOM загружен');
     
-    populatePriceGrids();
-    populateCalculator();
-    updateCalculator();
-    setupMobileMenu();
-    setupRating();
-    displayReviews();
+    const currentPage = getCurrentPage();
+    console.log('📄 Текущая страница:', currentPage);
     
-    // Показываем админу подсказку (если зашел по ссылке #admin)
-    if (isAdmin()) {
-        setTimeout(() => {
-            alert('Режим администратора: рядом с отзывами появились кнопки удаления');
-        }, 500);
+    // AOS для всех страниц
+    if (typeof AOS !== 'undefined') {
+        AOS.init({ duration: 800, once: true });
     }
     
-    // Обработчики для Instagram
-    document.getElementById('instagramBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        openInstagram();
-    });
+    // Мобильное меню для всех страниц
+    setupMobileMenu();
     
-    document.getElementById('instagramFooter')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        openInstagram();
-    });
+    // Соцсети для всех страниц
+    document.getElementById('instagramBtn')?.addEventListener('click', (e) => { e.preventDefault(); openInstagram(); });
+    document.getElementById('instagramFooter')?.addEventListener('click', (e) => { e.preventDefault(); openInstagram(); });
+    document.getElementById('whatsappBtn')?.addEventListener('click', (e) => { e.preventDefault(); openWhatsApp(); });
+    document.getElementById('whatsappFooter')?.addEventListener('click', (e) => { e.preventDefault(); openWhatsApp(); });
     
-    // Обработчики для WhatsApp
-    document.getElementById('whatsappBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        openWhatsApp();
-    });
-    
-    document.getElementById('whatsappFooter')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        openWhatsApp();
-    });
-    
-    // Калькулятор
-    document.getElementById('serviceSelect')?.addEventListener('change', updateCalculator);
-    document.getElementById('quantityInput')?.addEventListener('input', updateCalculator);
-    
-    // Заказ из калькулятора
-    document.getElementById('orderFromCalculator')?.addEventListener('click', function() {
-        const select = document.getElementById('serviceSelect');
-        const quantity = document.getElementById('quantityInput').value;
-        const price = document.getElementById('calculatedPrice').textContent;
+    // ===== ДЛЯ ГЛАВНОЙ СТРАНИЦЫ =====
+    if (currentPage === 'main') {
+        console.log('🏠 Запускаю главную страницу');
         
-        if (!select || select.selectedIndex === -1) return;
+        populatePriceGrids();
+        populateCalculator();
+        updateCalculator();
         
-        const service = allServices[select.selectedIndex];
-        const message = `Здравствуйте! Хочу заказать уборку:\nУслуга: ${service.name}\nКоличество: ${quantity} ${service.unit}\nСтоимость: ${price}`;
+        document.getElementById('serviceSelect')?.addEventListener('change', updateCalculator);
+        document.getElementById('quantityInput')?.addEventListener('input', updateCalculator);
         
-        const phone = '79064883194';
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-    });
+        document.getElementById('orderFromCalculator')?.addEventListener('click', function() {
+            const select = document.getElementById('serviceSelect');
+            const quantity = document.getElementById('quantityInput')?.value;
+            const price = document.getElementById('calculatedPrice')?.textContent;
+            if (!select || select.selectedIndex === -1) return;
+            const service = allServices[select.selectedIndex];
+            const message = `Здравствуйте! Хочу заказать уборку:\nУслуга: ${service.name}\nКоличество: ${quantity} ${service.unit}\nСтоимость: ${price}`;
+            const phone = '79064883194';
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        });
+    }
     
-    // Отправка отзыва
-    document.getElementById('reviewForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // ===== ДЛЯ СТРАНИЦЫ ОТЗЫВОВ =====
+    if (currentPage === 'reviews') {
+        console.log('📝 Запускаю страницу отзывов');
         
-        const name = document.getElementById('reviewName').value;
-        const rating = document.getElementById('reviewRating').value;
-        const text = document.getElementById('reviewText').value;
+        displayReviews();
         
-        if (name && text) {
-            addReview(name, parseInt(rating), text);
-            this.reset();
-            
-            // Сбрасываем звезды
-            document.querySelectorAll('.rating i').forEach(star => {
-                star.className = 'far fa-star';
-            });
-            document.getElementById('reviewRating').value = '5';
-            
-            alert('Спасибо за ваш отзыв!');
+        if (isAdmin()) {
+            setTimeout(() => alert('Режим администратора: кнопки удаления активны'), 500);
         }
-    });
+        
+        // Обработчик отправки отзыва
+        document.getElementById('reviewForm')?.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('reviewName')?.value.trim();
+            const rating = document.getElementById('reviewRating')?.value;
+            const text = document.getElementById('reviewText')?.value.trim();
+            const photos = getPhotosFromForm();
+
+            if (name && text) {
+                addReview(name, rating, text, photos);
+
+                // Сброс формы
+                this.reset();
+                
+                // Сброс фото
+                photoBefore = null;
+                photoAfter = null;
+                
+                const previewBefore = document.getElementById('previewBefore');
+                const previewAfter = document.getElementById('previewAfter');
+                const uploadAreaBefore = document.getElementById('uploadAreaBefore');
+                const uploadAreaAfter = document.getElementById('uploadAreaAfter');
+                const removeBefore = document.getElementById('removeBefore');
+                const removeAfter = document.getElementById('removeAfter');
+                const photoBeforeInput = document.getElementById('photoBefore');
+                const photoAfterInput = document.getElementById('photoAfter');
+
+                if (previewBefore) previewBefore.style.display = 'none';
+                if (previewAfter) previewAfter.style.display = 'none';
+                
+                if (uploadAreaBefore) {
+                    const ph = uploadAreaBefore.querySelector('.upload-placeholder');
+                    if (ph) ph.style.display = 'flex';
+                }
+                if (uploadAreaAfter) {
+                    const ph = uploadAreaAfter.querySelector('.upload-placeholder');
+                    if (ph) ph.style.display = 'flex';
+                }
+                
+                if (removeBefore) removeBefore.style.display = 'none';
+                if (removeAfter) removeAfter.style.display = 'none';
+                if (photoBeforeInput) photoBeforeInput.value = '';
+                if (photoAfterInput) photoAfterInput.value = '';
+
+                alert('Спасибо за ваш отзыв!');
+            } else {
+                alert('Пожалуйста, заполните все поля');
+            }
+        });
+    }
 });
