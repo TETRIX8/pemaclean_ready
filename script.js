@@ -178,7 +178,6 @@ window.deleteReview = function(reviewId) {
 };
 
 function openFullscreen(imgSrc, label) {
-    // Создаем модальное окно
     const modal = document.createElement('div');
     modal.className = 'fullscreen-modal';
     modal.innerHTML = `
@@ -189,22 +188,18 @@ function openFullscreen(imgSrc, label) {
         </div>
     `;
     
-    // Добавляем на страницу
     document.body.appendChild(modal);
     
-    // Закрытие по клику на крестик
     modal.querySelector('.close-modal').addEventListener('click', () => {
         modal.remove();
     });
     
-    // Закрытие по клику вне фото
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.remove();
         }
     });
     
-    // Закрытие по ESC
     document.addEventListener('keydown', function escHandler(e) {
         if (e.key === 'Escape') {
             modal.remove();
@@ -293,32 +288,43 @@ function getPhotosFromForm() {
     return photos;
 }
 
+// ===== АДАПТИВНОЕ ОТОБРАЖЕНИЕ ОТЗЫВОВ =====
 function displayReviews() {
     const container = document.getElementById('reviewsContainer');
     if (!container) return;
     const reviews = loadReviews();
     const admin = isAdmin();
+    
+    // Определяем тип устройства
+    const isMobile = window.innerWidth <= 768;
+    
     if (reviews.length === 0) {
         container.innerHTML = '<div class="no-reviews">Пока нет отзывов. Будьте первым!</div>';
         return;
     }
+    
     container.innerHTML = reviews.map(review => {
         const hasPhotos = review.photos && review.photos.length > 0;
         
-        // Формируем HTML для фото с правильными обработчиками кликов
+        // Для мобильных устройств фото всегда друг под другом
         let photosHtml = '';
         if (hasPhotos) {
-            if (review.photos.length === 1) {
+            if (review.photos.length === 1 || isMobile) {
+                // На мобильных даже 2 фото показываем друг под другом
                 photosHtml = `
                     <div class="review-photos">
-                        <div class="review-photo-item review-photo-single" onclick="openFullscreen('${review.photos[0]}', 'Фото')">
-                            <img src="${review.photos[0]}" alt="photo">
-                            <span class="review-photo-label">Фото</span>
-                        </div>
+                        ${review.photos.map((photo, index) => `
+                            <div class="review-photo-item ${review.photos.length === 1 ? 'review-photo-single' : ''}" 
+                                 onclick="openFullscreen('${photo}', '${index === 0 ? 'До' : (index === 1 ? 'После' : 'Фото')}')">
+                                <img src="${photo}" alt="${index === 0 ? 'до' : (index === 1 ? 'после' : 'фото')}">
+                                <span class="review-photo-label">${index === 0 ? 'До' : (index === 1 ? 'После' : 'Фото')}</span>
+                            </div>
+                        `).join('')}
                     </div>`;
             } else {
+                // На десктопе 2 фото рядом
                 photosHtml = `
-                    <div class="review-photos">
+                    <div class="review-photos desktop-grid">
                         <div class="review-photo-item" onclick="openFullscreen('${review.photos[0]}', 'До')">
                             <img src="${review.photos[0]}" alt="до">
                             <span class="review-photo-label">До</span>
@@ -407,6 +413,17 @@ function getCurrentPage() {
     if (path.includes('reviews.html')) return 'reviews';
     return 'main';
 }
+
+// ===== СЛЕДИМ ЗА ИЗМЕНЕНИЕМ РАЗМЕРА ЭКРАНА =====
+function handleResize() {
+    // Если мы на странице отзывов, обновляем отображение при изменении размера
+    if (getCurrentPage() === 'reviews') {
+        displayReviews();
+    }
+}
+
+// Добавляем обработчик изменения размера окна
+window.addEventListener('resize', handleResize);
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', function() {
