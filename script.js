@@ -151,10 +151,24 @@ function getInitials(name) {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 }
 
+// ===== ПРОВЕРКА АДМИНА =====
 function isAdmin() {
+    // Проверяем хеш в URL
     const hash = window.location.hash;
     console.log('📍 Хеш URL:', hash);
-    return hash === '#admin';
+    
+    // Проверяем и на мобильных устройствах
+    const isAdminMode = hash === '#admin';
+    
+    if (isAdminMode) {
+        console.log('👑 Режим администратора активен');
+        // Добавляем класс для body, чтобы можно было стилизовать
+        document.body.classList.add('admin-mode');
+    } else {
+        document.body.classList.remove('admin-mode');
+    }
+    
+    return isAdminMode;
 }
 
 function loadReviews() {
