@@ -520,93 +520,6 @@ body {
     color: #777;
 }
 
-/* Мобильная адаптация */
-@media (max-width: 768px) {
-    /* Скрываем навигационные ссылки по умолчанию */
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        padding: 20px;
-        gap: 15px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        z-index: 1000;
-        border-radius: 0 0 20px 20px;
-    }
-    
-    .nav-links.show {
-        display: flex;
-    }
-    
-    .nav-links a {
-        width: 100%;
-        text-align: center;
-        padding: 15px;
-        font-size: 16px;
-        border-radius: 10px;
-    }
-    
-    .nav-links a:hover {
-        background: #E07A5F;
-        color: white;
-    }
-    
-    /* Показываем кнопку-бургер */
-    .mobile-menu-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* Убираем дублирование логотипа в навигации (оставляем только на главной) */
-    .navbar .logo {
-        display: none;
-    }
-    
-    /* Добавляем отступы для контента */
-    .hero {
-        padding-top: 20px;
-    }
-    
-    .hero-content {
-        padding: 30px 15px;
-    }
-    
-    .hero h1 {
-        font-size: 42px;
-        margin-top: 0;
-    }
-    
-    .hero-actions {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .btn-instagram,
-    .btn-whatsapp {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-/* Мобильная кнопка-бургер */
-.mobile-menu-btn {
-    display: none;
-    background: #E07A5F;
-    color: white;
-    border: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(224,122,95,0.3);
-}
-
 /* ===== СТРАНИЦА ОТЗЫВОВ ===== */
 .reviews-hero {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -1091,58 +1004,6 @@ body {
     border-radius: 20px;
 }
 
-/* Мобильная версия */
-@media (max-width: 768px) {
-    .reviews-grid {
-        padding: 0 10px;
-        gap: 16px;
-    }
-    
-    .review-card {
-        padding: 16px;
-    }
-    
-    .review-photos {
-        flex-direction: column;
-    }
-    
-    .review-photo-item {
-        width: 100%;
-        flex: none;
-    }
-    
-    .review-photo-item img {
-        height: 200px;
-    }
-    
-    .review-form-container {
-        padding: 24px 16px;
-        margin: 0 10px 30px;
-    }
-    
-    .upload-area {
-        padding: 30px 15px;
-        min-height: 160px;
-    }
-    
-    .upload-placeholder i {
-        font-size: 36px;
-    }
-    
-    .close-modal {
-        top: 10px;
-        right: 10px;
-        font-size: 50px;
-    }
-    
-    .modal-label {
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-}
-
-
 /* ===== СТРАНИЦА РАБОТ ===== */
 .works-page-content {
     padding: 40px 0 80px;
@@ -1191,7 +1052,6 @@ body {
     transform: scale(1.05);
 }
 
-/* Бейджи для фото */
 .work-item-badge {
     position: absolute;
     top: 10px;
@@ -1206,40 +1066,15 @@ body {
 }
 
 .work-item-badge.before {
-    background: #e74c3c;  /* Красный для До */
+    background: #e74c3c;
 }
 
 .work-item-badge.after {
-    background: #27ae60;   /* Зеленый для После */
+    background: #27ae60;
 }
 
 .work-item-badge.result {
-    background: #9b59b6;   /* Фиолетовый для Результат */
-}
-
-/* Адаптивность */
-@media (max-width: 992px) {
-    .works-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .works-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .work-item-badge {
-        font-size: 10px;
-        padding: 3px 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .works-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    background: #9b59b6;
 }
 
 /* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА ФОТО ===== */
@@ -1286,57 +1121,192 @@ body {
     color: #ff6b6b;
 }
 
+/* ===== ЕДИНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+@media (max-width: 992px) {
+    .works-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
+    /* Навигация */
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        gap: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        z-index: 9999;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .nav-links.show {
+        display: flex !important;
+    }
+    
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+    
+    .nav-links a:hover {
+        background: #E07A5F;
+        color: white;
+    }
+    
+    .mobile-menu-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .navbar .logo {
+        display: none;
+    }
+    
+    /* Hero секция */
+    .hero {
+        min-height: auto;
+        padding: 60px 0 40px;
+    }
+    
+    .hero-content {
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+    
+    .hero h1 {
+        font-size: 42px;
+    }
+    
+    .hero-tagline {
+        font-size: 18px;
+    }
+    
+    .hero-description {
+        font-size: 15px;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .btn-instagram,
+    .btn-whatsapp {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+    
+    /* 3D-шары */
+    .shape-1 { width: 300px; height: 300px; }
+    .shape-2 { width: 350px; height: 350px; }
+    .shape-3 { width: 250px; height: 250px; }
+    .shape-4 { width: 200px; height: 200px; }
+    
+    /* Цены */
+    .price-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Калькулятор */
+    .calculator-body {
+        padding: 25px;
+    }
+    
+    .calculator-price-value {
+        font-size: 28px;
+    }
+    
+    /* Отзывы */
+    .reviews-grid {
+        padding: 0 10px;
+        gap: 16px;
+    }
+    
+    .review-card {
+        padding: 16px;
+    }
+    
+    .review-photos {
+        flex-direction: column;
+    }
+    
+    .review-photo-item {
+        width: 100%;
+    }
+    
+    .review-photo-item img {
+        height: 200px;
+    }
+    
+    .review-form-container {
+        padding: 24px 16px;
+        margin: 0 10px 30px;
+    }
+    
+    .upload-area {
+        padding: 30px 15px;
+        min-height: 160px;
+    }
+    
+    .upload-placeholder i {
+        font-size: 36px;
+    }
+    
+    /* Работы */
+    .works-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .work-item-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    
+    /* Модальные окна */
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        font-size: 50px;
+    }
+    
+    .modal-label {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
     .work-view-close {
         top: -50px;
         right: 10px;
         font-size: 50px;
     }
+    
+    /* Футер */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .footer-social {
+        justify-content: center;
+    }
 }
 
-/* ПРИНУДИТЕЛЬНЫЕ ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНЫХ */
-@media (max-width: 768px) {
-    /* Показываем кнопку меню */
-    .mobile-menu-btn {
-        display: flex !important;
-    }
-    
-    /* Прячем навигационные ссылки по умолчанию */
-    .nav-links {
-        display: none !important;
-        position: absolute !important;
-        top: 100% !important;
-        left: 0 !important;
-        right: 0 !important;
-        background: white !important;
-        flex-direction: column !important;
-        padding: 20px !important;
-        gap: 10px !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-        z-index: 9999 !important;
-    }
-    
-    /* Показываем меню при добавлении класса show */
-    .nav-links.show {
-        display: flex !important;
-    }
-    
-    /* Стили для ссылок в меню */
-    .nav-links a {
-        width: 100% !important;
-        text-align: center !important;
-        padding: 15px !important;
-        font-size: 16px !important;
-        border-radius: 10px !important;
-    }
-    
-    /* Убираем логотип из навигации на мобильных */
-    .navbar .logo {
-        display: none !important;
-    }
-    
-    /* Добавляем отступ сверху для hero */
-    .hero {
-        padding-top: 20px !important;
+@media (max-width: 480px) {
+    .works-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
