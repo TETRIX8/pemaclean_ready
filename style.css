@@ -522,22 +522,54 @@ body {
 
 /* Мобильная адаптация */
 @media (max-width: 768px) {
+    /* Скрываем навигационные ссылки по умолчанию */
     .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        z-index: 1000;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .nav-links.show {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 5px;
-        padding: 10px 0;
     }
     
     .nav-links a {
-        font-size: 14px;
-        padding: 8px 12px;
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 10px;
     }
     
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
+    .nav-links a:hover {
+        background: #E07A5F;
+        color: white;
+    }
+    
+    /* Показываем кнопку-бургер */
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Убираем дублирование логотипа в навигации (оставляем только на главной) */
+    .navbar .logo {
+        display: none;
+    }
+    
+    /* Добавляем отступы для контента */
+    .hero {
+        padding-top: 20px;
     }
     
     .hero-content {
@@ -546,14 +578,7 @@ body {
     
     .hero h1 {
         font-size: 42px;
-    }
-    
-    .hero-tagline {
-        font-size: 18px;
-    }
-    
-    .hero-description {
-        font-size: 15px;
+        margin-top: 0;
     }
     
     .hero-actions {
@@ -565,30 +590,21 @@ body {
     .btn-whatsapp {
         width: 100%;
         justify-content: center;
-        padding: 14px 20px;
     }
-    
-    .price-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .calculator-body {
-        padding: 25px;
-    }
-    
-    .calculator-price-value {
-        font-size: 28px;
-    }
-    
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 20px;
-    }
-    
-    .footer-social {
-        justify-content: center;
-    }
+}
+
+/* Мобильная кнопка-бургер */
+.mobile-menu-btn {
+    display: none;
+    background: #E07A5F;
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(224,122,95,0.3);
 }
 
 /* ===== СТРАНИЦА ОТЗЫВОВ ===== */
