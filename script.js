@@ -331,7 +331,7 @@ function displayReviews() {
     console.log('📊 ВСЕГО ОТЗЫВОВ В ХРАНИЛИЩЕ:', reviews.length);
     console.log('📋 ПОЛНЫЙ СПИСОК ОТЗЫВОВ:', reviews);
     
-   
+    
     
     console.log('👑 Админ-режим:', admin ? 'ДА' : 'НЕТ');
     
@@ -442,10 +442,31 @@ function openWhatsApp() {
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobileMenuBtn');
     const navLinks = document.getElementById('navLinks');
+    
     if (menuBtn && navLinks) {
-        menuBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
+        // Убираем старые обработчики
+        menuBtn.replaceWith(menuBtn.cloneNode(true));
+        const newMenuBtn = document.getElementById('mobileMenuBtn');
+        
+        newMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            navLinks.classList.toggle('show');
+            console.log('Меню открыто/закрыто');
+        });
+        
+        // Закрываем меню при клике на ссылку
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => navLinks.classList.remove('show'));
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('show');
+            });
+        });
+        
+        // Закрываем меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!navLinks.contains(e.target) && !newMenuBtn.contains(e.target)) {
+                navLinks.classList.remove('show');
+            }
         });
     }
 }
