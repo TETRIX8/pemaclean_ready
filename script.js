@@ -602,3 +602,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// ===== УБИРАЕМ ПОДСКАЗКУ ПОСЛЕ КЛИКА =====
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    if (menuBtn) {
+        menuBtn.addEventListener('click', function() {
+            this.classList.add('clicked');
+        });
+    }
+});
