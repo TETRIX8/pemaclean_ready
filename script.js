@@ -328,10 +328,16 @@ function displayReviews() {
     if (!container) return;
     const reviews = loadReviews();
     const admin = isAdmin();
+    console.log('📊 ВСЕГО ОТЗЫВОВ В ХРАНИЛИЩЕ:', reviews.length);
+    console.log('📋 ПОЛНЫЙ СПИСОК ОТЗЫВОВ:', reviews);
+    
+    if (reviews.length > 0) {
+        alert(`Найдено отзывов: ${reviews.length}. Смотрите консоль (F12)`);
+    }
     
     console.log('👑 Админ-режим:', admin ? 'ДА' : 'НЕТ');
     
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (reviews.length === 0) {
         container.innerHTML = '<div class="no-reviews">Пока нет отзывов. Будьте первым!</div>';
@@ -404,7 +410,7 @@ function addReview(name, rating, text, photos) {
     
     if (saved) {
         displayReviews();
-        alert('✅ Спасибо за ваш отзыв!');
+        alert(' Спасибо за ваш отзыв!');
     }
     
     return saved;
