@@ -152,7 +152,9 @@ function getInitials(name) {
 }
 
 function isAdmin() {
-    return window.location.hash === '#admin';
+    const hash = window.location.hash;
+    console.log('📍 Хеш URL:', hash);
+    return hash === '#admin';
 }
 
 function loadReviews() {
@@ -161,19 +163,52 @@ function loadReviews() {
 }
 
 function saveReviews(reviews) {
-    localStorage.setItem('pemaCleaningReviews', JSON.stringify(reviews));
+    try {
+        const reviewsJson = JSON.stringify(reviews);
+        const sizeInMB = new Blob([reviewsJson]).size / (1024 * 1024);
+        
+        console.log('📊 Размер отзывов:', sizeInMB.toFixed(2), 'MB');
+        
+        if (sizeInMB > 4.5) {
+            alert('⚠️ Достигнут лимит хранилища. Удалите старые отзывы или подключите сервер.');
+            return false;
+        }
+        
+        localStorage.setItem('pemaCleaningReviews', reviewsJson);
+        console.log('✅ Сохранено отзывов:', reviews.length);
+        return true;
+    } catch (e) {
+        console.error('❌ Ошибка сохранения:', e);
+        alert('Ошибка при сохранении отзыва. Возможно, закончилось место.');
+        return false;
+    }
 }
 
+// ===== ФУНКЦИЯ УДАЛЕНИЯ ОТЗЫВА =====
 window.deleteReview = function(reviewId) {
+    console.log('🗑️ Попытка удалить отзыв:', reviewId);
+    
     if (!isAdmin()) {
+        console.log('❌ Не админ');
         alert('У вас нет прав для удаления');
         return;
     }
+    
     if (confirm('Удалить этот отзыв?')) {
         const reviews = loadReviews();
+        console.log('📊 До удаления:', reviews.length);
+        
         const updated = reviews.filter(r => r.id !== reviewId);
-        saveReviews(updated);
-        displayReviews();
+        console.log('📊 После удаления:', updated.length);
+        
+        const saved = saveReviews(updated);
+        
+        if (saved) {
+            displayReviews();
+            console.log('✅ Отзыв удален');
+        } else {
+            alert('❌ Не удалось удалить отзыв');
+        }
     }
 };
 
@@ -288,14 +323,14 @@ function getPhotosFromForm() {
     return photos;
 }
 
-// ===== АДАПТИВНОЕ ОТОБРАЖЕНИЕ ОТЗЫВОВ =====
 function displayReviews() {
     const container = document.getElementById('reviewsContainer');
     if (!container) return;
     const reviews = loadReviews();
     const admin = isAdmin();
     
-    // Определяем тип устройства
+    console.log('👑 Админ-режим:', admin ? 'ДА' : 'НЕТ');
+    
     const isMobile = window.innerWidth <= 768;
     
     if (reviews.length === 0) {
@@ -306,11 +341,9 @@ function displayReviews() {
     container.innerHTML = reviews.map(review => {
         const hasPhotos = review.photos && review.photos.length > 0;
         
-        // Для мобильных устройств фото всегда друг под другом
         let photosHtml = '';
         if (hasPhotos) {
             if (review.photos.length === 1 || isMobile) {
-                // На мобильных даже 2 фото показываем друг под другом
                 photosHtml = `
                     <div class="review-photos">
                         ${review.photos.map((photo, index) => `
@@ -322,7 +355,6 @@ function displayReviews() {
                         `).join('')}
                     </div>`;
             } else {
-                // На десктопе 2 фото рядом
                 photosHtml = `
                     <div class="review-photos desktop-grid">
                         <div class="review-photo-item" onclick="openFullscreen('${review.photos[0]}', 'До')">
@@ -366,9 +398,16 @@ function addReview(name, rating, text, photos) {
         photos: photos || [],
         date: new Date().toLocaleDateString('ru-RU')
     };
+    
     reviews.unshift(newReview);
-    saveReviews(reviews);
-    displayReviews();
+    const saved = saveReviews(reviews);
+    
+    if (saved) {
+        displayReviews();
+        alert('✅ Спасибо за ваш отзыв!');
+    }
+    
+    return saved;
 }
 
 // ===== СОЦСЕТИ =====
@@ -384,7 +423,7 @@ function openInstagram() {
 }
 
 function openWhatsApp() {
-    const phone = '79064883194';
+    const phone = '79885784206';
     const message = 'Здравствуйте! Хочу заказать уборку';
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
@@ -416,13 +455,11 @@ function getCurrentPage() {
 
 // ===== СЛЕДИМ ЗА ИЗМЕНЕНИЕМ РАЗМЕРА ЭКРАНА =====
 function handleResize() {
-    // Если мы на странице отзывов, обновляем отображение при изменении размера
     if (getCurrentPage() === 'reviews') {
         displayReviews();
     }
 }
 
-// Добавляем обработчик изменения размера окна
 window.addEventListener('resize', handleResize);
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
@@ -432,21 +469,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentPage = getCurrentPage();
     console.log('📄 Текущая страница:', currentPage);
     
-    // AOS для всех страниц
     if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 800, once: true });
     }
     
-    // Мобильное меню для всех страниц
     setupMobileMenu();
     
-    // Соцсети для всех страниц
     document.getElementById('instagramBtn')?.addEventListener('click', (e) => { e.preventDefault(); openInstagram(); });
     document.getElementById('instagramFooter')?.addEventListener('click', (e) => { e.preventDefault(); openInstagram(); });
     document.getElementById('whatsappBtn')?.addEventListener('click', (e) => { e.preventDefault(); openWhatsApp(); });
     document.getElementById('whatsappFooter')?.addEventListener('click', (e) => { e.preventDefault(); openWhatsApp(); });
     
-    // ===== ДЛЯ ГЛАВНОЙ СТРАНИЦЫ =====
     if (currentPage === 'main') {
         console.log('🏠 Запускаю главную страницу');
         
@@ -464,22 +497,23 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!select || select.selectedIndex === -1) return;
             const service = allServices[select.selectedIndex];
             const message = `Здравствуйте! Хочу заказать уборку:\nУслуга: ${service.name}\nКоличество: ${quantity} ${service.unit}\nСтоимость: ${price}`;
-            const phone = '79064883194';
+            const phone = '79885784206';
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
         });
     }
     
-    // ===== ДЛЯ СТРАНИЦЫ ОТЗЫВОВ =====
     if (currentPage === 'reviews') {
         console.log('📝 Запускаю страницу отзывов');
         
         displayReviews();
         
         if (isAdmin()) {
+            console.log('👑 Админ-режим активен');
             setTimeout(() => alert('Режим администратора: кнопки удаления активны'), 500);
+        } else {
+            console.log('👤 Обычный пользователь');
         }
         
-        // Обработчик отправки отзыва
         document.getElementById('reviewForm')?.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -491,10 +525,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (name && text) {
                 addReview(name, rating, text, photos);
 
-                // Сброс формы
                 this.reset();
                 
-                // Сброс фото
                 photoBefore = null;
                 photoAfter = null;
                 
