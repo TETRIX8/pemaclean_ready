@@ -612,3 +612,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// ===== ПРИНУДИТЕЛЬНАЯ ПРОКРУТКА В НАЧАЛО =====
+window.scrollTo(0, 0);
+
+// Для надежности - после полной загрузки страницы
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, 100);
+});
