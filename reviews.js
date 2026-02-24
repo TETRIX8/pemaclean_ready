@@ -1,16 +1,24 @@
 // ===== КОНФИГУРАЦИЯ SUPABASE =====
-const SUPABASE_URL = 'https://gxdaszzavrbrlwoqzyoe.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_sdkcgSWRjvbO8zPB22h5mQ_h9xqGwry';
+// Эта переменная инициализируется один раз при загрузке страницы
+if (typeof window.SUPABASE_INITIALIZED === 'undefined') {
+    window.SUPABASE_URL = 'https://gxdaszzavrbrlwoqzyoe.supabase.co';
+    window.SUPABASE_ANON_KEY = 'sb_publishable_sdkcgSWRjvbO8zPB22h5mQ_h9xqGwry';
+    window.SUPABASE_INITIALIZED = true;
+}
 
-// Инициализация клиента Supabase (ждем загрузки SDK)
+// Получаем или создаем клиент Supabase
 let supabase = null;
 
-// Ждем загрузки Supabase SDK
-if (window.supabase) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('✅ Supabase инициализирован');
-} else {
-    console.error('❌ Supabase SDK не загружен. Проверьте подключение скрипта в HTML.');
+function initSupabase() {
+    if (supabase) return supabase;
+    
+    if (window.supabase) {
+        supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+        console.log('✅ Supabase инициализирован');
+    } else {
+        console.error('❌ Supabase SDK не загружен. Проверьте подключение скрипта в HTML.');
+    }
+    return supabase;
 }
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
@@ -103,7 +111,13 @@ window.removePhoto = function(type) {
 
 // Функция загрузки изображения в Supabase Storage
 async function uploadToSupabase(file, type) {
-    if (!file || !supabase) return null;
+    if (!file) return null;
+    
+    const sb = initSupabase();
+    if (!sb) {
+        console.error('❌ Supabase не инициализирован');
+        return null;
+    }
     
     try {
         // Сжимаем перед загрузкой
@@ -114,7 +128,7 @@ async function uploadToSupabase(file, type) {
 
         console.log(`📤 Загружаем файл: ${filePath}`);
 
-        const { data, error } = await supabase.storage
+        const { data, error } = await sb.storage
             .from('review-photos')
             .upload(filePath, compressedBlob);
 
@@ -125,7 +139,7 @@ async function uploadToSupabase(file, type) {
 
         console.log('✅ Файл загружен:', data);
 
-        const { data: publicUrlData } = supabase.storage
+        const { data: publicUrlData } = sb.storage
             .from('review-photos')
             .getPublicUrl(filePath);
 
@@ -140,14 +154,15 @@ async function uploadToSupabase(file, type) {
 // ===== РАБОТА С ДАННЫМИ =====
 
 async function loadReviews() {
-    if (!supabase) {
+    const sb = initSupabase();
+    if (!sb) {
         console.error('❌ Supabase не инициализирован');
         return [];
     }
     
     try {
         console.log('📥 Загружаем отзывы из Supabase...');
-        const { data, error } = await supabase
+        const { data, error } = await sb
             .from('reviews')
             .select('*')
             .order('created_at', { ascending: false });
@@ -157,7 +172,7 @@ async function loadReviews() {
             return [];
         }
         
-        console.log(`✅ Загружено отзывов: ${data.length}`, data);
+        console.log(`✅ Загружено отзывов: ${data ? data.length : 0}`, data);
         return data || [];
     } catch (err) {
         console.error('❌ Ошибка при загрузке отзывов:', err);
@@ -171,14 +186,15 @@ async function deleteReview(reviewId) {
         return;
     }
     
-    if (!supabase) {
+    const sb = initSupabase();
+    if (!sb) {
         alert('Supabase не инициализирован');
         return;
     }
     
     if (confirm('Удалить этот отзыв?')) {
         try {
-            const { error } = await supabase
+            const { error } = await sb
                 .from('reviews')
                 .delete()
                 .eq('id', reviewId);
@@ -273,6 +289,9 @@ async function displayReviews() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DOM загружен');
     
+    // Инициализируем Supabase
+    initSupabase();
+    
     if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 800, once: true });
     }
@@ -289,7 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            if (!supabase) {
+            const sb = initSupabase();
+            if (!sb) {
                 alert('Supabase не инициализирован. Проверьте конфигурацию.');
                 return;
             }
@@ -333,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 2. Сохраняем отзыв в Database
                 console.log('💾 Сохраняем отзыв в базу данных...');
-                const { data, error } = await supabase
+                const { data, error } = await sb
                     .from('reviews')
                     .insert([
                         { 
