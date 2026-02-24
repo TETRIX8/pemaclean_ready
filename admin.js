@@ -10,6 +10,47 @@
     let supabaseClient = null;
     let isAuthenticated = false;
 
+    // ===== ФУНКЦИИ ЗАЩИТЫ =====
+    
+    const DANGEROUS_PATTERNS = [
+        /<script[^>]*>.*?<\/script>/gi,
+        /javascript:/gi,
+        /on\w+\s*=/gi,
+        /<iframe/gi,
+        /<object/gi,
+        /<embed/gi,
+        /eval\(/gi,
+        /expression\(/gi,
+        /vbscript:/gi,
+        /data:text\/html/gi
+    ];
+
+    function containsDangerousCode(input) {
+        if (typeof input !== 'string') return false;
+        return DANGEROUS_PATTERNS.some(pattern => pattern.test(input));
+    }
+
+    function sanitizeInput(input) {
+        if (typeof input !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = input;
+        return div.innerHTML;
+    }
+
+    function validateAndCleanInput(input, maxLength = 500) {
+        if (typeof input !== 'string') return '';
+        
+        if (containsDangerousCode(input)) {
+            alert('⚠️ Ислам сац везар хьо');
+            console.warn('🚨 Попытка инъекции:', input);
+            return null;
+        }
+        
+        let cleaned = sanitizeInput(input);
+        cleaned = cleaned.substring(0, maxLength).trim();
+        return cleaned;
+    }
+
     // ===== ИНИЦИАЛИЗАЦИЯ SUPABASE =====
     function initSupabase() {
         if (supabaseClient) return supabaseClient;
@@ -232,15 +273,30 @@
     }
 
     window.saveSettings = function() {
+        let title = document.getElementById('siteTitle').value;
+        let description = document.getElementById('siteDescription').value;
+        let phone = document.getElementById('sitePhone').value;
+        let email = document.getElementById('siteEmail').value;
+
+        title = validateAndCleanInput(title, 100);
+        description = validateAndCleanInput(description, 500);
+        phone = validateAndCleanInput(phone, 50);
+        email = validateAndCleanInput(email, 100);
+
+        if (!title || !description) {
+            alert('Error: Invalid data');
+            return;
+        }
+
         const settings = {
-            title: document.getElementById('siteTitle').value,
-            description: document.getElementById('siteDescription').value,
-            phone: document.getElementById('sitePhone').value,
-            email: document.getElementById('siteEmail').value
+            title: title,
+            description: description,
+            phone: phone,
+            email: email
         };
 
         localStorage.setItem('siteSettings', JSON.stringify(settings));
-        alert('✅ Настройки сохранены');
+        alert('Settings saved');
     };
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====

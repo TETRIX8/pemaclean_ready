@@ -22,6 +22,62 @@
         return supabaseClient;
     }
 
+    // ===== ФУНКЦИИ ЗАЩИТЫ И ВАЛИДАЦИИ =====
+    
+    // Паттерны для обнаружения вредоносного кода
+    const DANGEROUS_PATTERNS = [
+        /<script[^>]*>.*?<\/script>/gi,
+        /javascript:/gi,
+        /on\w+\s*=/gi,
+        /<iframe/gi,
+        /<object/gi,
+        /<embed/gi,
+        /eval\(/gi,
+        /expression\(/gi,
+        /vbscript:/gi,
+        /data:text\/html/gi,
+        /<img[^>]*on/gi,
+        /<svg[^>]*on/gi,
+        /alert\(/gi,
+        /confirm\(/gi,
+        /prompt\(/gi
+    ];
+
+    // Функция для проверки на опасный контент
+    function containsDangerousCode(input) {
+        if (typeof input !== 'string') return false;
+        return DANGEROUS_PATTERNS.some(pattern => pattern.test(input));
+    }
+
+    // Функция для санитизации HTML
+    function sanitizeInput(input) {
+        if (typeof input !== 'string') return '';
+        
+        const div = document.createElement('div');
+        div.textContent = input;
+        return div.innerHTML;
+    }
+
+    // Функция для валидации и очистки текста
+    function validateAndCleanInput(input, maxLength = 1000) {
+        if (typeof input !== 'string') return '';
+        
+        // Проверяем на опасный код
+        if (containsDangerousCode(input)) {
+            alert('⚠️ Ислам сац везар хьо');
+            console.warn('🚨 Попытка инъекции вредоносного кода:', input);
+            return null;
+        }
+        
+        // Санитизируем
+        let cleaned = sanitizeInput(input);
+        
+        // Обрезаем до максимальной длины
+        cleaned = cleaned.substring(0, maxLength).trim();
+        
+        return cleaned;
+    }
+
     // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 
     function compressImage(file, maxWidth = 800, quality = 0.7) {
@@ -321,9 +377,13 @@
                 const submitBtn = form.querySelector('.btn-submit-review');
                 const originalBtnText = submitBtn.innerHTML;
                 
-                const name = document.getElementById('reviewName')?.value.trim();
+                let name = document.getElementById('reviewName')?.value.trim();
                 const rating = document.getElementById('reviewRating')?.value;
-                const text = document.getElementById('reviewText')?.value.trim();
+                let text = document.getElementById('reviewText')?.value.trim();
+                
+                // Валидируем и очищаем данные
+                name = validateAndCleanInput(name, 100);
+                text = validateAndCleanInput(text, 1000);
                 
                 if (!name || !text) {
                     alert('Пожалуйста, заполните имя и текст отзыва');
