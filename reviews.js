@@ -1,13 +1,16 @@
 // ===== КОНФИГУРАЦИЯ SUPABASE =====
-// Вставьте ваши данные из настроек проекта Supabase (Settings -> API)
 const SUPABASE_URL = 'https://gxdaszzavrbrlwoqzyoe.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_sdkcgSWRjvbO8zPB22h5mQ_h9xqGwry';
 
-// Инициализация клиента Supabase
-const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+// Инициализация клиента Supabase (ждем загрузки SDK)
+let supabase = null;
 
-if (!supabase) {
-    console.error('Supabase SDK не загружен. Проверьте подключение скрипта в HTML.');
+// Ждем загрузки Supabase SDK
+if (window.supabase) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase инициализирован');
+} else {
+    console.error('❌ Supabase SDK не загружен. Проверьте подключение скрипта в HTML.');
 }
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
@@ -100,45 +103,66 @@ window.removePhoto = function(type) {
 
 // Функция загрузки изображения в Supabase Storage
 async function uploadToSupabase(file, type) {
-    if (!file) return null;
+    if (!file || !supabase) return null;
     
-    // Сжимаем перед загрузкой
-    const compressedBlob = await compressImage(file);
-    const fileExt = 'jpg';
-    const fileName = `${Date.now()}_${type}.${fileExt}`;
-    const filePath = `reviews/${fileName}`;
+    try {
+        // Сжимаем перед загрузкой
+        const compressedBlob = await compressImage(file);
+        const fileExt = 'jpg';
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}_${type}.${fileExt}`;
+        const filePath = `reviews/${fileName}`;
 
-    const { data, error } = await supabase.storage
-        .from('review-photos')
-        .upload(filePath, compressedBlob);
+        console.log(`📤 Загружаем файл: ${filePath}`);
 
-    if (error) {
-        console.error('Ошибка загрузки в Storage:', error);
+        const { data, error } = await supabase.storage
+            .from('review-photos')
+            .upload(filePath, compressedBlob);
+
+        if (error) {
+            console.error('❌ Ошибка загрузки в Storage:', error);
+            return null;
+        }
+
+        console.log('✅ Файл загружен:', data);
+
+        const { data: publicUrlData } = supabase.storage
+            .from('review-photos')
+            .getPublicUrl(filePath);
+
+        console.log('🔗 Публичный URL:', publicUrlData.publicUrl);
+        return publicUrlData.publicUrl;
+    } catch (err) {
+        console.error('❌ Ошибка при загрузке:', err);
         return null;
     }
-
-    const { data: publicUrlData } = supabase.storage
-        .from('review-photos')
-        .getPublicUrl(filePath);
-
-    return publicUrlData.publicUrl;
 }
 
 // ===== РАБОТА С ДАННЫМИ =====
 
 async function loadReviews() {
-    if (!supabase) return [];
-    
-    const { data, error } = await supabase
-        .from('reviews')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Ошибка загрузки отзывов:', error);
+    if (!supabase) {
+        console.error('❌ Supabase не инициализирован');
         return [];
     }
-    return data;
+    
+    try {
+        console.log('📥 Загружаем отзывы из Supabase...');
+        const { data, error } = await supabase
+            .from('reviews')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('❌ Ошибка загрузки отзывов:', error);
+            return [];
+        }
+        
+        console.log(`✅ Загружено отзывов: ${data.length}`, data);
+        return data || [];
+    } catch (err) {
+        console.error('❌ Ошибка при загрузке отзывов:', err);
+        return [];
+    }
 }
 
 async function deleteReview(reviewId) {
@@ -147,16 +171,28 @@ async function deleteReview(reviewId) {
         return;
     }
     
+    if (!supabase) {
+        alert('Supabase не инициализирован');
+        return;
+    }
+    
     if (confirm('Удалить этот отзыв?')) {
-        const { error } = await supabase
-            .from('reviews')
-            .delete()
-            .eq('id', reviewId);
+        try {
+            const { error } = await supabase
+                .from('reviews')
+                .delete()
+                .eq('id', reviewId);
 
-        if (error) {
-            alert('Ошибка при удалении: ' + error.message);
-        } else {
-            displayReviews();
+            if (error) {
+                console.error('❌ Ошибка удаления:', error);
+                alert('Ошибка при удалении: ' + error.message);
+            } else {
+                console.log('✅ Отзыв удален');
+                displayReviews();
+            }
+        } catch (err) {
+            console.error('❌ Ошибка при удалении отзыва:', err);
+            alert('Произошла ошибка при удалении отзыва');
         }
     }
 }
@@ -177,7 +213,7 @@ async function displayReviews() {
     
     container.innerHTML = reviews.map(review => {
         const photoUrls = review.photo_urls || [];
-        const hasPhotos = photoUrls.length > 0;
+        const hasPhotos = photoUrls && photoUrls.length > 0;
         
         let photosHtml = '';
         if (hasPhotos) {
@@ -185,7 +221,7 @@ async function displayReviews() {
                 photosHtml = `
                     <div class="review-photos">
                         <div class="review-photo-item review-photo-single">
-                            <img src="${photoUrls[0]}" alt="photo">
+                            <img src="${photoUrls[0]}" alt="photo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EФото%3C/text%3E%3C/svg%3E'">
                             <span class="review-photo-label">Фото</span>
                         </div>
                     </div>`;
@@ -193,11 +229,11 @@ async function displayReviews() {
                 photosHtml = `
                     <div class="review-photos">
                         <div class="review-photo-item">
-                            <img src="${photoUrls[0]}" alt="до">
+                            <img src="${photoUrls[0]}" alt="до" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EДо%3C/text%3E%3C/svg%3E'">
                             <span class="review-photo-label">До</span>
                         </div>
                         <div class="review-photo-item">
-                            <img src="${photoUrls[1]}" alt="после">
+                            <img src="${photoUrls[1]}" alt="после" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%23999%22%3EПосле%3C/text%3E%3C/svg%3E'">
                             <span class="review-photo-label">После</span>
                         </div>
                     </div>`;
@@ -225,25 +261,38 @@ async function displayReviews() {
             </div>
         `;
     }).join('');
+    
+    // Переинициализируем AOS для новых элементов
+    if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+    }
 }
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM загружен');
+    
     if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 800, once: true });
     }
     
+    // Отображаем отзывы при загрузке страницы
     displayReviews();
     
     if (window.location.hash === '#admin') {
-        console.log('Режим администратора активен');
+        console.log('👑 Режим администратора активен');
     }
     
     const form = document.getElementById('reviewForm');
     if (form) {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            if (!supabase) {
+                alert('Supabase не инициализирован. Проверьте конфигурацию.');
+                return;
+            }
             
             const submitBtn = form.querySelector('.btn-submit-review');
             const originalBtnText = submitBtn.innerHTML;
@@ -252,36 +301,55 @@ document.addEventListener('DOMContentLoaded', function() {
             const rating = document.getElementById('reviewRating')?.value;
             const text = document.getElementById('reviewText')?.value.trim();
             
-            if (!name || !text) return;
+            if (!name || !text) {
+                alert('Пожалуйста, заполните имя и текст отзыва');
+                return;
+            }
 
             try {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Публикация...';
 
+                console.log('📝 Начинаем добавление отзыва...');
+
                 // 1. Загружаем фото в Storage
                 const photoUrls = [];
                 if (photoBeforeFile) {
+                    console.log('📤 Загружаем фото ДО...');
                     const url = await uploadToSupabase(photoBeforeFile, 'before');
-                    if (url) photoUrls.push(url);
+                    if (url) {
+                        photoUrls.push(url);
+                        console.log('✅ Фото ДО загружено');
+                    }
                 }
                 if (photoAfterFile) {
+                    console.log('📤 Загружаем фото ПОСЛЕ...');
                     const url = await uploadToSupabase(photoAfterFile, 'after');
-                    if (url) photoUrls.push(url);
+                    if (url) {
+                        photoUrls.push(url);
+                        console.log('✅ Фото ПОСЛЕ загружено');
+                    }
                 }
 
                 // 2. Сохраняем отзыв в Database
-                const { error } = await supabase
+                console.log('💾 Сохраняем отзыв в базу данных...');
+                const { data, error } = await supabase
                     .from('reviews')
                     .insert([
                         { 
                             name, 
                             rating: parseInt(rating), 
                             text, 
-                            photo_urls: photoUrls 
+                            photo_urls: photoUrls.length > 0 ? photoUrls : null
                         }
                     ]);
 
-                if (error) throw error;
+                if (error) {
+                    console.error('❌ Ошибка при сохранении отзыва:', error);
+                    throw error;
+                }
+
+                console.log('✅ Отзыв успешно сохранен:', data);
 
                 // 3. Сброс формы и обновление
                 form.reset();
@@ -292,11 +360,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (ratingSelect) ratingSelect.value = '5';
                 
                 alert('Спасибо за ваш отзыв!');
-                displayReviews();
+                await displayReviews();
 
             } catch (err) {
-                console.error('Ошибка при отправке:', err);
-                alert('Произошла ошибка при отправке отзыва. Проверьте настройки Supabase.');
+                console.error('❌ Ошибка при отправке:', err);
+                alert('Произошла ошибка при отправке отзыва. Проверьте консоль браузера для деталей.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
