@@ -3,33 +3,33 @@
 const worksData = [
     // ПАРНЫЕ ФОТО (до/после) - 6 работ = 12 карточек (с надписями До/После)
     // Работа 1 - Душевая кабина
-    { id: 1, type: "before", image: "images/IMG-20260223-WA0004.jpg", workId: 1 },
-    { id: 2, type: "after", image: "images/IMG-20260223-WA0000.jpg", workId: 1 },
+    { id: 1, type: "before", image: "images/IMG-20260223-WA0004.webp", imageFallback: "images/IMG-20260223-WA0004.jpg", workId: 1 },
+    { id: 2, type: "after", image: "images/IMG-20260223-WA0000.webp", imageFallback: "images/IMG-20260223-WA0000.jpg", workId: 1 },
     
     // Работа 2
-    { id: 3, type: "before", image: "images/IMG-20260223-WA0005.jpg", workId: 2 },
-    { id: 4, type: "after", image: "images/IMG-20260223-WA0001.jpg", workId: 2 },
+    { id: 3, type: "before", image: "images/IMG-20260223-WA0005.webp", imageFallback: "images/IMG-20260223-WA0005.jpg", workId: 2 },
+    { id: 4, type: "after", image: "images/IMG-20260223-WA0001.webp", imageFallback: "images/IMG-20260223-WA0001.jpg", workId: 2 },
     
     // Работа 3
-    { id: 5, type: "before", image: "images/IMG-20260223-WA0002.jpg", workId: 3 },
-    { id: 6, type: "after", image: "images/IMG-20260223-WA0006.jpg", workId: 3 },
+    { id: 5, type: "before", image: "images/IMG-20260223-WA0002.webp", imageFallback: "images/IMG-20260223-WA0002.jpg", workId: 3 },
+    { id: 6, type: "after", image: "images/IMG-20260223-WA0006.webp", imageFallback: "images/IMG-20260223-WA0006.jpg", workId: 3 },
     
     // Работа 4
-    { id: 7, type: "before", image: "images/IMG-20260223-WA0012.jpg", workId: 4 },
-    { id: 8, type: "after", image: "images/IMG-20260223-WA0003.jpg", workId: 4 },
+    { id: 7, type: "before", image: "images/IMG-20260223-WA0012.webp", imageFallback: "images/IMG-20260223-WA0012.jpg", workId: 4 },
+    { id: 8, type: "after", image: "images/IMG-20260223-WA0003.webp", imageFallback: "images/IMG-20260223-WA0003.jpg", workId: 4 },
     
     // Работа 5
-    { id: 9, type: "before", image: "images/IMG-20260223-WA0009.jpg", workId: 5 },
-    { id: 10, type: "after", image: "images/IMG-20260223-WA0010.jpg", workId: 5 },
+    { id: 9, type: "before", image: "images/IMG-20260223-WA0009.webp", imageFallback: "images/IMG-20260223-WA0009.jpg", workId: 5 },
+    { id: 10, type: "after", image: "images/IMG-20260223-WA0010.webp", imageFallback: "images/IMG-20260223-WA0010.jpg", workId: 5 },
     
     // Работа 6
-    { id: 11, type: "before", image: "images/IMG-20260223-WA0007.jpg", workId: 6 },
-    { id: 12, type: "after", image: "images/IMG-20260223-WA0011.jpg", workId: 6 },
+    { id: 11, type: "before", image: "images/IMG-20260223-WA0007.webp", imageFallback: "images/IMG-20260223-WA0007.jpg", workId: 6 },
+    { id: 12, type: "after", image: "images/IMG-20260223-WA0011.webp", imageFallback: "images/IMG-20260223-WA0011.jpg", workId: 6 },
     
     // ОДИНОЧНЫЕ ФОТО (только фото, без надписей) - 3 фото
-    { id: 13, type: "single", image: "images/IMG-20260223-WA0008.jpg", workId: 7 },
-     { id: 14, type: "result", image: "images/IMG-20260223-WA0013.jpg", workId: 8 },
-    { id: 15, type: "result", image: "images/IMG-20260223-WA0014.jpg", workId: 9 }
+    { id: 13, type: "single", image: "images/IMG-20260223-WA0008.webp", imageFallback: "images/IMG-20260223-WA0008.jpg", workId: 7 },
+    { id: 14, type: "result", image: "images/IMG-20260223-WA0013.webp", imageFallback: "images/IMG-20260223-WA0013.jpg", workId: 8 },
+    { id: 15, type: "result", image: "images/IMG-20260223-WA0014.webp", imageFallback: "images/IMG-20260223-WA0014.jpg", workId: 9 }
 ];
 
 // ===== ОТОБРАЖЕНИЕ РАБОТ =====
@@ -54,9 +54,12 @@ function displayWorks() {
         }
         
         return `
-            <div class="work-item" data-aos="fade-up" data-work-id="${item.workId}" data-image="${item.image}">
+            <div class="work-item" data-aos="fade-up" data-work-id="${item.workId}" data-image="${item.image}" data-image-fallback="${item.imageFallback}">
                 <div class="work-item-image">
-                    <img src="${item.image}" alt="Фото работы" loading="lazy">
+                    <picture>
+                        <source srcset="${item.image}" type="image/webp">
+                        <img src="${item.imageFallback}" alt="Фото работы" loading="lazy" decoding="async">
+                    </picture>
                     ${badgeText ? `<span class="work-item-badge ${badgeClass}">${badgeText}</span>` : ''}
                 </div>
             </div>
@@ -65,13 +68,16 @@ function displayWorks() {
 }
 
 // ===== МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА ФОТО =====
-function openImageModal(imageSrc) {
+function openImageModal(imageSrc, imageFallback) {
     const modal = document.createElement('div');
     modal.className = 'work-view-modal';
     modal.innerHTML = `
         <div class="work-view-content">
             <span class="work-view-close">&times;</span>
-            <img src="${imageSrc}" alt="Просмотр фото">
+            <picture>
+                <source srcset="${imageSrc}" type="image/webp">
+                <img src="${imageFallback || imageSrc}" alt="Просмотр фото">
+            </picture>
         </div>
     `;
     
@@ -104,8 +110,9 @@ function setupPhotoClicks() {
     document.querySelectorAll('.work-item').forEach(item => {
         item.addEventListener('click', function() {
             const imageSrc = this.dataset.image;
+            const imageFallback = this.dataset.imageFallback;
             if (imageSrc) {
-                openImageModal(imageSrc);
+                openImageModal(imageSrc, imageFallback);
             }
         });
     });
