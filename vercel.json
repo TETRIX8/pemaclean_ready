@@ -1,22 +1,40 @@
 {
   "version": 2,
   "name": "pemaclean",
-  "builds": [
+  "headers": [
     {
-      "src": "*.html",
-      "use": "@vercel/static"
+      "source": "/images/(.*)\\.webp",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+        { "key": "Content-Type", "value": "image/webp" }
+      ]
     },
     {
-      "src": "*.css",
-      "use": "@vercel/static"
+      "source": "/images/(.*)\\.jpg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     },
     {
-      "src": "*.js",
-      "use": "@vercel/static"
+      "source": "/(.*)\\.min\\.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
     },
     {
-      "src": "images/**",
-      "use": "@vercel/static"
+      "source": "/(.*)\\.min\\.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
+      ]
     }
   ],
   "routes": [
